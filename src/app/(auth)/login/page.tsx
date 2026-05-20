@@ -1,0 +1,103 @@
+"use client";
+
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Zap, Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+function LoginForm() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!res.ok) {
+        setError("Incorrect password. Please try again.");
+        return;
+      }
+
+      const from = searchParams.get("from") ?? "/dashboard";
+      router.push(from);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-[#DCC9F7] bg-white p-8 shadow-sm space-y-5"
+    >
+      <h2 className="text-base font-semibold text-gray-900">Sign in to continue</h2>
+
+      <div className="relative">
+        <input
+          type={show ? "text" : "password"}
+          placeholder="Enter password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          autoFocus
+          className="w-full rounded-lg border border-[#DCC9F7] bg-white px-4 py-2.5 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1] focus:border-transparent"
+        />
+        <button
+          type="button"
+          onClick={() => setShow((v) => !v)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#4027C1]"
+        >
+          {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+        </button>
+      </div>
+
+      {error && (
+        <p className="text-xs text-red-500">{error}</p>
+      )}
+
+      <Button type="submit" loading={loading} className="w-full">
+        Sign in
+      </Button>
+    </form>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#F5F3FC] px-4">
+      <div className="w-full max-w-sm">
+        {/* Logo */}
+        <div className="mb-8 flex flex-col items-center gap-3">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2D1879] shadow-lg">
+            <Zap className="h-7 w-7 text-[#DCC9F7]" />
+          </div>
+          <div className="text-center">
+            <h1 className="text-xl font-bold text-gray-900">Leen Design Studios</h1>
+            <p className="mt-1 text-sm text-gray-500">Invoice Studio</p>
+          </div>
+        </div>
+
+        <Suspense fallback={
+          <div className="rounded-2xl border border-[#DCC9F7] bg-white p-8 text-center text-sm text-gray-400">
+            Loading...
+          </div>
+        }>
+          <LoginForm />
+        </Suspense>
+      </div>
+    </div>
+  );
+}

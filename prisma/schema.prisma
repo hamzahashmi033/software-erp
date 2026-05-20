@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Department {
+  FRONT
+  UPSELL
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  VIEWED
+  PAID
+  VOID
+}
+
+enum PaymentMerchant {
+  STRIPE
+}
+
+model Invoice {
+  id               String          @id @default(cuid())
+  stripeInvoiceId  String?         @unique
+  stripeCustomerId String?
+  clientName       String
+  clientEmail      String
+  clientContact    String?
+  packageName      String?
+  department       Department
+  descriptionHtml  String          @db.Text
+  items            Json
+  totalAmount      Int
+  currency         String          @default("usd")
+  status           InvoiceStatus   @default(DRAFT)
+  paymentMerchant  PaymentMerchant @default(STRIPE)
+  stripePayUrl     String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  sentAt           DateTime?
+  paidAt           DateTime?
+  views            InvoiceView[]
+  activeViewers    ActiveViewer[]
+
+  @@index([status])
+  @@index([department])
+  @@index([createdAt])
+}
+
+model InvoiceView {
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  ip        String?
+  userAgent String?
+  viewedAt  DateTime @default(now())
+
+  @@index([invoiceId])
+}
+
+model ActiveViewer {
+  id        String   @id @default(cuid())
+  invoiceId String
+  invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  sessionId String
+  lastSeen  DateTime @default(now())
+
+  @@unique([invoiceId, sessionId])
+  @@index([invoiceId, lastSeen])
+}
