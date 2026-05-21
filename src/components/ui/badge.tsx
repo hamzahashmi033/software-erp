@@ -7,6 +7,7 @@ const colorStyles = {
   blue: "bg-blue-50 text-blue-700 ring-blue-200",
   gray: "bg-gray-100 text-gray-600 ring-gray-200",
   red: "bg-red-50 text-red-600 ring-red-200",
+  orange: "bg-orange-50 text-orange-700 ring-orange-200",
 };
 
 interface StatusBadgeProps {
@@ -29,7 +30,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: "default" | "green" | "yellow" | "blue" | "gray" | "red" | "purple";
+  variant?: "default" | "green" | "yellow" | "blue" | "gray" | "red" | "orange" | "purple";
 }
 
 export function Badge({ children, variant = "default" }: BadgeProps) {

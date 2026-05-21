@@ -18,6 +18,7 @@ enum InvoiceStatus {
   VIEWED
   PAID
   VOID
+  PAYMENT_FAILED
 }
 
 enum PaymentMerchant {
@@ -28,6 +29,7 @@ model Invoice {
   id               String          @id @default(cuid())
   stripeInvoiceId  String?         @unique
   stripeCustomerId String?
+  stripeHostedUrl  String?
   clientName       String
   clientEmail      String
   clientContact    String?
@@ -37,6 +39,9 @@ model Invoice {
   items            Json
   totalAmount      Int
   currency         String          @default("usd")
+  taxRate          Float?
+  dueDate          DateTime?
+  notes            String?         @db.Text
   status           InvoiceStatus   @default(DRAFT)
   paymentMerchant  PaymentMerchant @default(STRIPE)
   stripePayUrl     String?

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, PlusCircle, Zap } from "lucide-react";
+import { LayoutDashboard, FileText, PlusCircle } from "lucide-react";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -15,18 +15,17 @@ export function Sidebar() {
 
   return (
     <aside className="flex w-60 shrink-0 flex-col bg-[#2D1879]">
-      {/* Logo */}
-      <div className="flex items-center gap-2.5 border-b border-white/10 px-5 py-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#DCC9F7]">
-          <Zap className="h-4 w-4 text-[#2D1879]" />
-        </div>
-        <div>
-          <p className="text-sm font-semibold text-white">Leen Design</p>
-          <p className="text-xs text-white/50">Invoice Studio</p>
+      <div className="flex items-center justify-center border-b border-white/10 px-5 py-4">
+        <div className="rounded-xl bg-white px-8 py-4">
+          <img
+            src="/logo-v2-1.png"
+            alt="Leen Design"
+            className="h-14 w-auto object-contain"
+          />
         </div>
       </div>
 
-      {/* Nav */}
+      
       <nav className="flex-1 space-y-0.5 px-3 py-4">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active =
@@ -50,8 +49,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      {/* Footer */}
       <div className="border-t border-white/10 px-5 py-4">
         <p className="text-xs text-white/30">© Leen Design Studios</p>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Select } from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/custom-select";
 
 interface DepartmentSelectProps {
   value: string;
@@ -8,20 +8,22 @@ interface DepartmentSelectProps {
   error?: string;
 }
 
+const OPTIONS = [
+  { value: "FRONT", label: "Front", meta: "New client acquisition" },
+  { value: "UPSELL", label: "Upsell", meta: "Existing client upgrade" },
+];
+
 export function DepartmentSelect({ value, onChange, error }: DepartmentSelectProps) {
   return (
-    <Select
+    <CustomSelect
       label="Type (Internal)"
       required
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
+      options={OPTIONS}
+      placeholder="Select type…"
       error={error}
       helper="Not visible to the client"
-      options={[
-        { value: "", label: "Select department..." },
-        { value: "FRONT", label: "Front" },
-        { value: "UPSELL", label: "Upsell" },
-      ]}
     />
   );
 }

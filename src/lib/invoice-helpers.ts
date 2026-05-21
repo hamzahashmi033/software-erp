@@ -20,22 +20,24 @@ export function statusLabel(status: InvoiceStatus): string {
     VIEWED: "Viewed",
     PAID: "Paid",
     VOID: "Void",
+    PAYMENT_FAILED: "Failed",
   };
   return labels[status];
 }
 
 export function statusColor(
   status: InvoiceStatus
-): "green" | "yellow" | "blue" | "gray" | "red" {
+): "green" | "yellow" | "blue" | "gray" | "red" | "orange" {
   const colors: Record<
     InvoiceStatus,
-    "green" | "yellow" | "blue" | "gray" | "red"
+    "green" | "yellow" | "blue" | "gray" | "red" | "orange"
   > = {
     DRAFT: "gray",
     SENT: "yellow",
     VIEWED: "blue",
     PAID: "green",
     VOID: "red",
+    PAYMENT_FAILED: "orange",
   };
   return colors[status];
 }

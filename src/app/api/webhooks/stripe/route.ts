@@ -1,6 +1,12 @@
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/prisma";
-import { sendMail, buildPaymentNotificationEmail } from "@/lib/mailer";
+import {
+  sendMail,
+  buildPaymentNotificationEmail,
+  buildPaymentSuccessClientEmail,
+  buildPaymentFailedClientEmail,
+} from "@/lib/mailer";
+import type Stripe from "stripe";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +18,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Missing signature" }, { status: 400 });
   }
 
-  let event;
+  let event: Stripe.Event;
   try {
     event = stripe.webhooks.constructEvent(
       Buffer.from(rawBody),
@@ -24,14 +30,28 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  if (event.type === "payment_intent.succeeded") {
-    const paymentIntent = event.data.object;
-    const invoiceId = paymentIntent.metadata?.invoiceId;
-
+  if (event.type === "invoice.finalized") {
+    const stripeInvoice = event.data.object as Stripe.Invoice;
+    const invoiceId = stripeInvoice.metadata?.invoiceId;
     if (!invoiceId) return Response.json({ received: true });
 
-    const invoice = await db.invoice.findUnique({ where: { id: invoiceId } });
-    if (!invoice || invoice.status === "PAID") {
+    await db.invoice.updateMany({
+      where: { id: invoiceId },
+      data: {
+        stripeHostedUrl: stripeInvoice.hosted_invoice_url ?? undefined,
+        totalAmount: stripeInvoice.amount_due,
+        status: "SENT",
+      },
+    });
+  }
+
+  if (event.type === "invoice.paid") {
+    const stripeInvoice = event.data.object as Stripe.Invoice;
+    const invoiceId = stripeInvoice.metadata?.invoiceId;
+    if (!invoiceId) return Response.json({ received: true });
+
+    const dbInvoice = await db.invoice.findUnique({ where: { id: invoiceId } });
+    if (!dbInvoice || dbInvoice.status === "PAID") {
       return Response.json({ received: true });
     }
 
@@ -41,24 +61,75 @@ export async function POST(request: Request) {
       data: { status: "PAID", paidAt },
     });
 
-    // Email billing team
+    const fromName = process.env.FROM_NAME ?? "Payment";
     const billingEmail = process.env.BILLING_EMAIL;
-    if (billingEmail) {
-      const html = buildPaymentNotificationEmail({
-        clientName: invoice.clientName,
-        clientEmail: invoice.clientEmail,
-        invoiceId: invoice.id,
-        totalAmount: invoice.totalAmount,
-        currency: invoice.currency,
-        paidAt,
-      });
 
-      await sendMail({
-        to: billingEmail,
-        subject: `Payment received — ${invoice.clientName}`,
-        html,
-      });
+    await Promise.all([
+      // Client thank-you email
+      sendMail({
+        to: dbInvoice.clientEmail,
+        subject: `Payment confirmed — thank you, ${dbInvoice.clientName}!`,
+        html: buildPaymentSuccessClientEmail({
+          clientName: dbInvoice.clientName,
+          invoiceId: dbInvoice.id,
+          totalAmount: stripeInvoice.amount_paid,
+          currency: dbInvoice.currency,
+          paidAt,
+          fromName,
+        }),
+      }),
+      // Admin notification
+      ...(billingEmail
+        ? [
+            sendMail({
+              to: billingEmail,
+              subject: `Payment received — ${dbInvoice.clientName}`,
+              html: buildPaymentNotificationEmail({
+                clientName: dbInvoice.clientName,
+                clientEmail: dbInvoice.clientEmail,
+                invoiceId: dbInvoice.id,
+                totalAmount: stripeInvoice.amount_paid,
+                currency: dbInvoice.currency,
+                paidAt,
+              }),
+            }),
+          ]
+        : []),
+    ]);
+  }
+
+  if (event.type === "invoice.payment_failed") {
+    const stripeInvoice = event.data.object as Stripe.Invoice;
+    const invoiceId = stripeInvoice.metadata?.invoiceId;
+    if (!invoiceId) return Response.json({ received: true });
+
+    const dbInvoice = await db.invoice.findUnique({ where: { id: invoiceId } });
+    if (!dbInvoice || dbInvoice.status === "PAID" || dbInvoice.status === "VOID") {
+      return Response.json({ received: true });
     }
+
+    await db.invoice.update({
+      where: { id: invoiceId },
+      data: { status: "PAYMENT_FAILED" },
+    });
+
+    const fromName = process.env.FROM_NAME ?? "Payment";
+    const payUrl =
+      dbInvoice.stripeHostedUrl ??
+      `${process.env.NEXT_PUBLIC_APP_URL}/pay/${invoiceId}`;
+
+    await sendMail({
+      to: dbInvoice.clientEmail,
+      subject: `Payment unsuccessful — please try again`,
+      html: buildPaymentFailedClientEmail({
+        clientName: dbInvoice.clientName,
+        invoiceId: dbInvoice.id,
+        totalAmount: dbInvoice.totalAmount,
+        currency: dbInvoice.currency,
+        payUrl,
+        fromName,
+      }),
+    });
   }
 
   return Response.json({ received: true });

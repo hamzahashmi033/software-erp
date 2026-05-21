@@ -1,20 +1,39 @@
-import { Zap } from "lucide-react";
+const fromName = process.env.FROM_NAME ?? "Invoice";
 
 export default function PayLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-12">
-      <div className="mx-auto max-w-xl">
-        {/* Logo */}
-        <div className="mb-8 flex items-center justify-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
-            <Zap className="h-4 w-4 text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-[#F5F3FC] via-[#EDE9FB] to-[#DCC9F7]">
+      {/* Top brand bar */}
+      <header className="bg-white/80 backdrop-blur-sm border-b border-[#DCC9F7] px-6 py-4 sticky top-0 z-10">
+        <div className="mx-auto max-w-2xl flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo-v2-1.png"
+              alt={fromName}
+              className="h-12 w-auto object-contain"
+            />
           </div>
-          <span className="text-sm font-semibold text-slate-700">
-            {process.env.FROM_NAME ?? "Invoice"}
+          <span className="flex items-center gap-1.5 text-xs text-gray-400">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            Secured by Stripe
           </span>
         </div>
+      </header>
+
+      <main className="mx-auto max-w-2xl px-4 py-10">
         {children}
-      </div>
+      </main>
+
+      <footer className="py-8 text-center">
+        <p className="text-xs text-[#9b8ec4]">
+          {fromName} &nbsp;·&nbsp; Payments powered by{" "}
+          <span className="font-medium text-[#4027C1]">Stripe</span>
+          &nbsp;·&nbsp; Your payment is secure and encrypted
+        </p>
+      </footer>
     </div>
   );
 }

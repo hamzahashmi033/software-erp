@@ -20,6 +20,7 @@ const STATUS_OPTIONS = [
   { value: "VIEWED", label: "Viewed" },
   { value: "PAID", label: "Paid" },
   { value: "VOID", label: "Void" },
+  { value: "PAYMENT_FAILED", label: "Failed" },
 ];
 
 const DEPT_OPTIONS = [
