@@ -67,13 +67,14 @@ function invoiceEmailShell(body: string) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
-<body style="margin:0;padding:0;background:#2D1879;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#2D1879;padding:40px 16px;">
+<body style="margin:0;padding:0;background:#ffffff;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;padding:40px 16px;">
     <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+      <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
         <tr>
-          <td style="background:#2D1879;padding:24px;text-align:center;">
-            <img src="${logoUrl}" alt="Leen Design Studios" height="64" style="height:64px;width:auto;display:block;margin:0 auto;filter:brightness(0) invert(1);" />
+          <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:3px solid #4027C1;">
+            <img src="${logoUrl}" alt="Leen Design Studios" height="60" style="height:60px;width:auto;display:block;margin:0 auto;" />
+            <p style="margin:12px 0 0;font-size:13px;font-weight:600;color:#4027C1;letter-spacing:0.2px;">Invoice Ready for Payment &mdash; Leen Design Studios</p>
           </td>
         </tr>
         <tr>
@@ -86,6 +87,9 @@ function invoiceEmailShell(body: string) {
             <p style="margin:0 0 4px;font-size:12px;color:#9ca3af;">
               Need assistance? Reach out to us at
               <a href="mailto:${supportEmail}" style="font-weight:600;color:#374151;text-decoration:none;">${supportEmail}</a>
+            </p>
+            <p style="margin:0 0 4px;font-size:12px;">
+              <a href="https://leendesignstudio.com/terms-conditions/" style="font-weight:600;color:#374151;text-decoration:none;">Terms &amp; Conditions</a>
             </p>
             <p style="margin:0;font-size:12px;color:#d1d5db;">
               &copy; ${year} <strong style="color:#9ca3af;">Leen Design Studios</strong>. All rights reserved.
@@ -164,7 +168,7 @@ export function buildInvoiceEmail(params: {
   const invoiceNum = `#${invoiceId.slice(-8).toUpperCase()}`;
 
   return invoiceEmailShell(`
-    <h1 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#4027C1;">Your Invoice is Ready!</h1>
+    <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#4027C1;">Invoice Ready for Payment &mdash; Leen Design Studios!</h1>
 
     <p style="margin:0 0 4px;font-size:14px;color:#1f2937;">Dear <strong>${clientName}</strong>,</p>
     <p style="margin:0 0 32px;font-size:14px;color:#6b7280;line-height:1.6;">

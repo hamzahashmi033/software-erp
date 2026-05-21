@@ -132,6 +132,11 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
               {process.env.NEXT_PUBLIC_SUPPORT_EMAIL ?? "info@leendesignstudios.com"}
             </a>
           </p>
+          <p className="text-xs text-gray-500">
+            <a href={'https://leendesignstudio.com/terms-conditions/'} target="_blank" className="font-semibold text-gray-700">
+              Terms & Condtitions
+            </a>
+          </p>
           <p className="text-xs text-gray-400 mt-1">
             &copy; {new Date().getFullYear()} <strong className="text-gray-500">Leen Design Studios</strong>. All rights reserved.
           </p>
