@@ -103,6 +103,18 @@ export function InvoiceTableRow({ invoice, onRefresh }: InvoiceTableRowProps) {
           <ActiveViewerBadge invoiceId={invoice.id} />
         </div>
       </td>
+      <td className="px-4 py-3">
+        {invoice.createdByAgent ? (
+          <>
+            <p className="text-sm text-gray-800">{invoice.createdByAgent}</p>
+            {invoice.createdByAgentEmail && (
+              <p className="text-xs text-gray-400">{invoice.createdByAgentEmail}</p>
+            )}
+          </>
+        ) : (
+          <span className="text-xs text-gray-400">Admin</span>
+        )}
+      </td>
       <td className="px-4 py-3 text-xs text-gray-500">
         {timeAgo(invoice.createdAt)}
         {invoice.paidAt && (

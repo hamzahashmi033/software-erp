@@ -121,7 +121,7 @@ export function InvoiceTable() {
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
-                  {["Client", "Type", "Status", "Amount", "Views", "Date", ""].map((h) => (
+                  {["Client", "Type", "Status", "Amount", "Views", "Created By", "Date", ""].map((h) => (
                     <th
                       key={h}
                       className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#4027C1]"

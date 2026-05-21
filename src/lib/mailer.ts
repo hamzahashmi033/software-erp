@@ -73,7 +73,10 @@ function invoiceEmailShell(body: string) {
       <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
         <tr>
           <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:3px solid #4027C1;">
-            <img src="${logoUrl}" alt="Leen Design Studios" height="60" style="height:60px;width:auto;display:block;margin:0 auto;" />
+           
+          <a href="https://leendesignstudio.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;">
+            <img src="${logoUrl}" alt="Leen Design Studios" height="60" style="height:60px;width:auto;display:block;margin:0 auto;border:0;" />
+          </a>
            
           </td>
         </tr>
