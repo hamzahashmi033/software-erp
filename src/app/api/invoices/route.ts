@@ -1,7 +1,6 @@
 import { db } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import { sendMail, buildInvoiceEmail } from "@/lib/mailer";
-import { buildPayUrl } from "@/lib/invoice-helpers";
+import { sendMail, buildInvoiceEmail, buildInvoiceCreatedEmail } from "@/lib/mailer";
 import { createInvoiceSchema, type LineItem } from "@/lib/validations";
 import type { InvoiceStatus } from "@/generated/prisma/enums";
 
@@ -56,13 +55,16 @@ export async function POST(request: Request) {
     }
 
     const data = parsed.data;
-    const totalAmount = data.items.reduce(
-      (sum: number, item: LineItem) => sum + item.quantity * item.unitPrice,
+    const subtotalCents = data.items.reduce(
+      (sum: number, item: LineItem) => sum + Math.round(item.quantity * item.unitPrice * 100),
       0
     );
-    const totalCents = Math.round(totalAmount * 100);
+    const taxCents = data.taxRate
+      ? Math.round(subtotalCents * (data.taxRate / 100))
+      : 0;
+    const totalCents = subtotalCents + taxCents;
 
-    // Create invoice record (DRAFT)
+    // Save draft record first so we have an ID for Stripe metadata
     const invoice = await db.invoice.create({
       data: {
         clientName: data.clientName,
@@ -74,23 +76,23 @@ export async function POST(request: Request) {
         items: data.items,
         totalAmount: totalCents,
         currency: data.currency,
+        taxRate: data.taxRate ?? null,
+        dueDate: data.dueDate ? new Date(data.dueDate) : null,
+        notes: data.notes ?? null,
         paymentMerchant: data.paymentMerchant,
+        createdByAgent: data.createdByAgent ?? null,
+        createdByAgentEmail: data.createdByAgentEmail ?? null,
         status: "DRAFT",
       },
     });
 
-    const payUrl = buildPayUrl(invoice.id);
-
-    // Stripe + email — failures here still return 201 with a warning
     try {
-      const existingCustomers = await stripe.customers.list({
-        email: data.clientEmail,
-        limit: 1,
-      });
-
+      // 1. Create or find Stripe customer
+      const existing = await stripe.customers.list({ email: data.clientEmail, limit: 1 });
       let customerId: string;
-      if (existingCustomers.data.length > 0) {
-        customerId = existingCustomers.data[0].id;
+      if (existing.data.length > 0) {
+        customerId = existing.data[0].id;
+        await stripe.customers.update(customerId, { name: data.clientName });
       } else {
         const customer = await stripe.customers.create({
           name: data.clientName,
@@ -100,47 +102,150 @@ export async function POST(request: Request) {
         customerId = customer.id;
       }
 
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: totalCents,
-        currency: data.currency,
+      // 2. Create Stripe invoice in draft
+      // Parse date-only strings as end-of-day UTC so selecting "today" still gives
+      // a future timestamp. Then apply a 1-hour safety floor.
+      const nowSec = Math.floor(Date.now() / 1000);
+      let dueDateUnix: number;
+      if (data.dueDate) {
+        const d = new Date(data.dueDate);
+        d.setUTCHours(23, 59, 59, 0);
+        const ts = Math.floor(d.getTime() / 1000);
+        dueDateUnix = ts > nowSec + 3600 ? ts : nowSec + 86400;
+      } else {
+        dueDateUnix = nowSec + 30 * 86400;
+      }
+
+      const stripeInvoice = await stripe.invoices.create({
         customer: customerId,
-        description: `Invoice for ${data.clientName}`,
+        currency: data.currency,
+        collection_method: "send_invoice",
+        due_date: dueDateUnix,
+        description: data.packageName ?? undefined,
+        footer: data.notes ?? undefined,
         metadata: { invoiceId: invoice.id },
-        automatic_payment_methods: { enabled: true },
       });
+
+      // 3. Create invoice items — `amount` is the line total; Stripe rejects
+      //    `quantity` when `amount` is also set, so we embed qty in the description.
+      for (const item of data.items) {
+        const lineDescription =
+          item.quantity > 1
+            ? `${item.description} × ${item.quantity}`
+            : item.description;
+        await stripe.invoiceItems.create({
+          customer: customerId,
+          invoice: stripeInvoice.id,
+          amount: Math.round(item.unitPrice * item.quantity * 100),
+          currency: data.currency,
+          description: lineDescription,
+        });
+      }
+
+      // 4. Apply tax rate if provided
+      if (data.taxRate && data.taxRate > 0) {
+        const taxRate = await stripe.taxRates.create({
+          display_name: "Tax",
+          inclusive: false,
+          percentage: data.taxRate,
+        });
+        await stripe.invoices.update(stripeInvoice.id, {
+          default_tax_rates: [taxRate.id],
+        });
+      }
+
+      // 5. Finalize the invoice — this locks it and generates the hosted URL
+      const finalized = await stripe.invoices.finalizeInvoice(stripeInvoice.id);
+      const hostedUrl = finalized.hosted_invoice_url ?? null;
+      const finalAmount = finalized.amount_due;
 
       const updated = await db.invoice.update({
         where: { id: invoice.id },
         data: {
-          stripeInvoiceId: paymentIntent.id,
+          stripeInvoiceId: finalized.id,
           stripeCustomerId: customerId,
-          stripePayUrl: payUrl,
+          stripeHostedUrl: hostedUrl,
+          totalAmount: finalAmount,
           status: "SENT",
           sentAt: new Date(),
         },
       });
 
+      // 6. Send email with Stripe hosted URL
+      const payUrl = hostedUrl ?? `${process.env.NEXT_PUBLIC_APP_URL}/pay/${invoice.id}`;
       const fromName = process.env.FROM_NAME ?? "Payment";
+      const agentName = data.createdByAgent ?? undefined;
+      const agentEmail = data.createdByAgentEmail ?? undefined;
+      const pdfAttachment = data.agreementPdfBase64
+        ? {
+            filename: data.agreementPdfName ?? "services-agreement.pdf",
+            content: Buffer.from(data.agreementPdfBase64, "base64"),
+            contentType: "application/pdf",
+          }
+        : null;
+
       const emailHtml = buildInvoiceEmail({
         clientName: data.clientName,
+        clientEmail: data.clientEmail,
+        clientContact: data.clientContact ?? null,
         invoiceId: invoice.id,
-        totalAmount: totalCents,
+        packageName: data.packageName ?? null,
+        descriptionHtml: data.descriptionHtml,
+        totalAmount: finalAmount,
         currency: data.currency,
+        createdAt: new Date(),
         payUrl,
         fromName,
+        agentName,
+        agentEmail,
+        hasAgreement: !!pdfAttachment,
       });
 
-      await sendMail({
-        to: data.clientEmail,
-        subject: `Invoice from ${fromName}`,
-        html: emailHtml,
-      });
+      const billingEmail = process.env.BILLING_EMAIL;
+
+      await Promise.all([
+        // Client email (with optional PDF attachment)
+        sendMail({
+          to: data.clientEmail,
+          subject: `Invoice from ${fromName}`,
+          html: emailHtml,
+          attachments: pdfAttachment ? [pdfAttachment] : undefined,
+        }),
+        // Billing team notification
+        ...(billingEmail
+          ? [
+              sendMail({
+                to: billingEmail,
+                subject: `New invoice created — ${data.clientName} (${new Intl.NumberFormat("en-US", { style: "currency", currency: data.currency.toUpperCase() }).format(finalAmount / 100)})`,
+                html: buildInvoiceCreatedEmail({
+                  clientName: data.clientName,
+                  clientEmail: data.clientEmail,
+                  clientContact: data.clientContact ?? null,
+                  invoiceId: invoice.id,
+                  packageName: data.packageName ?? null,
+                  descriptionHtml: data.descriptionHtml,
+                  totalAmount: finalAmount,
+                  currency: data.currency,
+                  stripeHostedUrl: hostedUrl,
+                  createdAt: new Date(),
+                  fromName,
+                  agentName,
+                  agentEmail,
+                  hasAgreement: !!pdfAttachment,
+                }),
+              }),
+            ]
+          : []),
+      ]);
 
       return Response.json({ invoice: updated }, { status: 201 });
     } catch (stripeOrEmailErr) {
       console.error("Stripe/email error:", stripeOrEmailErr);
       return Response.json(
-        { invoice, warning: "Invoice saved but Stripe/email failed: " + String(stripeOrEmailErr) },
+        {
+          invoice,
+          warning: "Invoice saved but Stripe/email failed: " + String(stripeOrEmailErr),
+        },
         { status: 201 }
       );
     }

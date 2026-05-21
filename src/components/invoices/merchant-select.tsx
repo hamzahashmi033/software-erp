@@ -1,19 +1,23 @@
 "use client";
 
-import { Select } from "@/components/ui/select";
+import { CustomSelect } from "@/components/ui/custom-select";
 
 interface MerchantSelectProps {
   value: string;
   onChange: (v: string) => void;
 }
 
+const OPTIONS = [
+  { value: "STRIPE", label: "Stripe", meta: "Hosted payment page" },
+];
+
 export function MerchantSelect({ value, onChange }: MerchantSelectProps) {
   return (
-    <Select
+    <CustomSelect
       label="Payment Merchant"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
-      options={[{ value: "STRIPE", label: "Stripe" }]}
+      onChange={onChange}
+      options={OPTIONS}
       helper="More merchants coming soon"
     />
   );

@@ -12,12 +12,11 @@ export async function POST(
     return Response.json({ error: "Not found" }, { status: 404 });
   }
 
-  // Cancel Stripe PaymentIntent if it exists
   if (invoice.stripeInvoiceId) {
     try {
-      await stripe.paymentIntents.cancel(invoice.stripeInvoiceId);
+      await stripe.invoices.voidInvoice(invoice.stripeInvoiceId);
     } catch {
-      // PaymentIntent may already be cancelled or succeeded — ignore
+      // Invoice may already be void or uncollectible — ignore
     }
   }
 

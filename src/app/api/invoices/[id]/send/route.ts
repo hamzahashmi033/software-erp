@@ -1,6 +1,5 @@
 import { db } from "@/lib/prisma";
 import { sendMail, buildInvoiceEmail } from "@/lib/mailer";
-import { buildPayUrl } from "@/lib/invoice-helpers";
 
 export async function POST(
   _req: Request,
@@ -13,15 +12,25 @@ export async function POST(
     return Response.json({ error: "Not found" }, { status: 404 });
   }
 
-  const payUrl = buildPayUrl(id);
+  const payUrl =
+    invoice.stripeHostedUrl ??
+    `${process.env.NEXT_PUBLIC_APP_URL}/pay/${id}`;
+
   const fromName = process.env.FROM_NAME ?? "Payment";
   const emailHtml = buildInvoiceEmail({
     clientName: invoice.clientName,
+    clientEmail: invoice.clientEmail,
+    clientContact: invoice.clientContact ?? null,
     invoiceId: id,
+    packageName: invoice.packageName ?? null,
+    descriptionHtml: invoice.descriptionHtml,
     totalAmount: invoice.totalAmount,
     currency: invoice.currency,
+    createdAt: invoice.createdAt,
     payUrl,
     fromName,
+    agentName: invoice.createdByAgent ?? undefined,
+    agentEmail: invoice.createdByAgentEmail ?? undefined,
   });
 
   await sendMail({

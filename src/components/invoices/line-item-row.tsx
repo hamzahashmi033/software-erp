@@ -10,9 +10,14 @@ interface LineItemRowProps {
   onChange: (index: number, item: LineItem) => void;
   onRemove: (index: number) => void;
   removable: boolean;
+  currency?: string;
 }
 
-export function LineItemRow({ item, index, onChange, onRemove, removable }: LineItemRowProps) {
+const inputBase =
+  "w-full rounded-lg border border-[#DCC9F7] bg-white text-sm text-gray-900 placeholder:text-gray-400 " +
+  "focus:outline-none focus:border-[#4027C1] focus:ring-2 focus:ring-[#4027C1]/20 transition-all";
+
+export function LineItemRow({ item, index, onChange, onRemove, removable, currency = "usd" }: LineItemRowProps) {
   const subtotal = Math.round(item.quantity * item.unitPrice * 100);
 
   function update(field: keyof LineItem, value: string | number) {
@@ -20,49 +25,62 @@ export function LineItemRow({ item, index, onChange, onRemove, removable }: Line
   }
 
   return (
-    <tr className="border-t border-[#ece8f8]">
-      <td className="py-2 pr-3">
+    <tr className="group border-t border-[#ece8f8] hover:bg-[#faf9ff] transition-colors">
+      {/* Description */}
+      <td className="px-3 py-2.5">
         <input
           type="text"
           placeholder="Service or item description"
           value={item.description}
           onChange={(e) => update("description", e.target.value)}
-          className="w-full rounded-md border border-[#DCC9F7] bg-white px-3 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-[#4027C1]"
+          className={`${inputBase} px-3 py-1.5`}
         />
       </td>
-      <td className="py-2 pr-3 w-24">
+
+      {/* Qty */}
+      <td className="px-3 py-2.5 w-[90px]">
         <input
           type="number"
           min={1}
           value={item.quantity}
           onChange={(e) => update("quantity", parseFloat(e.target.value) || 1)}
-          className="w-full rounded-md border border-[#DCC9F7] bg-white px-3 py-1.5 text-sm text-center text-gray-900 focus:outline-none focus:ring-1 focus:ring-[#4027C1]"
+          className={`${inputBase} px-2 py-1.5 text-center`}
         />
       </td>
-      <td className="py-2 pr-3 w-32">
+
+      {/* Unit Price */}
+      <td className="px-3 py-2.5 w-[130px]">
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+          <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-400">
+            {currency === "usd" ? "$" : currency === "eur" ? "€" : currency === "gbp" ? "£" : ""}
+          </span>
           <input
             type="number"
             min={0}
             step={0.01}
             value={item.unitPrice}
             onChange={(e) => update("unitPrice", parseFloat(e.target.value) || 0)}
-            className="w-full rounded-md border border-[#DCC9F7] bg-white pl-6 pr-3 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-[#4027C1]"
+            className={`${inputBase} py-1.5 pr-3 ${["usd","eur","gbp"].includes(currency) ? "pl-6" : "pl-3"}`}
           />
         </div>
       </td>
-      <td className="py-2 pr-3 w-28 text-right text-sm font-medium text-gray-700">
-        {formatCurrency(subtotal)}
+
+      {/* Subtotal */}
+      <td className="px-3 py-2.5 w-[110px] text-right">
+        <span className="text-sm font-semibold text-[#2D1879]">
+          {formatCurrency(subtotal, currency)}
+        </span>
       </td>
-      <td className="py-2 w-10 text-right">
+
+      {/* Remove */}
+      <td className="py-2.5 pr-3 w-10 text-center">
         <button
           type="button"
           onClick={() => onRemove(index)}
           disabled={!removable}
-          className="rounded p-1.5 text-gray-300 hover:text-red-500 disabled:opacity-30 transition-colors"
+          className="rounded-lg p-1.5 text-gray-300 opacity-0 group-hover:opacity-100 hover:bg-red-50 hover:text-red-500 disabled:pointer-events-none disabled:opacity-0 transition-all"
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 className="h-3.5 w-3.5" />
         </button>
       </td>
     </tr>

@@ -16,6 +16,13 @@ export const createInvoiceSchema = z.object({
   items: z.array(lineItemSchema).min(1, "At least one line item is required"),
   currency: z.string().default("usd"),
   paymentMerchant: z.enum(["STRIPE"]).default("STRIPE"),
+  taxRate: z.number().min(0).max(100).optional(),
+  dueDate: z.string().optional(),
+  notes: z.string().optional(),
+  createdByAgent: z.string().optional(),
+  createdByAgentEmail: z.string().email().optional(),
+  agreementPdfBase64: z.string().optional(),
+  agreementPdfName: z.string().optional(),
 });
 
 export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Send, AlertCircle } from "lucide-react";
+import { Send, AlertCircle, User, FileText, Receipt, Settings2, Paperclip } from "lucide-react";
 import { ClientFields } from "./client-fields";
 import { DepartmentSelect } from "./department-select";
 import { MerchantSelect } from "./merchant-select";
@@ -11,29 +11,54 @@ import { LineItemsEditor } from "./line-items-editor";
 import { RichTextEditor } from "./rich-text-editor";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { createInvoiceSchema, type LineItem } from "@/lib/validations";
+import { PdfUpload } from "./pdf-upload";
 
 const defaultItem: LineItem = { description: "", quantity: 1, unitPrice: 0 };
 
-export function InvoiceForm() {
+export interface InvoiceResult {
+  id: string;
+  clientName: string;
+  clientEmail: string;
+  clientContact?: string | null;
+  packageName?: string | null;
+  descriptionHtml: string;
+  totalAmount: number;
+  currency: string;
+  createdAt: string;
+  stripeHostedUrl?: string | null;
+  createdByAgent?: string | null;
+  createdByAgentEmail?: string | null;
+}
+
+interface InvoiceFormProps {
+  agentName?: string;
+  agentEmail?: string;
+  onSuccess?: (invoice: InvoiceResult) => void;
+}
+
+export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormProps = {}) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [serverError, setServerError] = useState("");
   const [warning, setWarning] = useState("");
 
-  // Client details
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
   const [clientContact, setClientContact] = useState("");
-
-  // Invoice details
   const [department, setDepartment] = useState("");
   const [merchant, setMerchant] = useState("STRIPE");
   const [currency, setCurrency] = useState("usd");
   const [packageName, setPackageName] = useState("");
   const [descriptionHtml, setDescriptionHtml] = useState("");
   const [items, setItems] = useState<LineItem[]>([defaultItem]);
+  const [taxRate, setTaxRate] = useState("");
+  const [dueDate, setDueDate] = useState("");
+  const [notes, setNotes] = useState("");
+  const [createdByAgent, setCreatedByAgent] = useState(agentName ?? "");
+  const [agreementPdf, setAgreementPdf] = useState<{ name: string; sizeKb: number; base64: string } | null>(null);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -53,6 +78,13 @@ export function InvoiceForm() {
       descriptionHtml,
       items,
       currency,
+      taxRate: taxRate ? parseFloat(taxRate) : undefined,
+      dueDate: dueDate || undefined,
+      notes: notes || undefined,
+      createdByAgent: createdByAgent.trim() || undefined,
+      createdByAgentEmail: agentEmail || undefined,
+      agreementPdfBase64: agreementPdf?.base64 || undefined,
+      agreementPdfName: agreementPdf?.name || undefined,
     };
 
     const parsed = createInvoiceSchema.safeParse(payload);
@@ -82,7 +114,12 @@ export function InvoiceForm() {
       }
 
       if (data.warning) setWarning(data.warning);
-      router.push(`/invoices/${data.invoice.id}`);
+
+      if (onSuccess) {
+        onSuccess(data.invoice as InvoiceResult);
+      } else {
+        router.push(`/invoices/${data.invoice.id}`);
+      }
     } catch {
       setServerError("Network error. Please try again.");
     } finally {
@@ -91,11 +128,17 @@ export function InvoiceForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 w-full">
-      {/* Client info */}
+    <form onSubmit={handleSubmit} className="space-y-5 max-w-6xl m-auto">
+
+      {/* ── 01 Customer ─────────────────────────────────────────────── */}
       <Card>
-        <CardHeader title="Customer Details" />
-        <CardContent className="space-y-4">
+        <CardHeader
+          step="1"
+          title="Customer Details"
+          description="Who is this invoice for?"
+          icon={<User className="h-3.5 w-3.5" />}
+        />
+        <CardContent className="space-y-5">
           <ClientFields
             clientName={clientName}
             clientEmail={clientEmail}
@@ -105,7 +148,9 @@ export function InvoiceForm() {
             onClientContactChange={setClientContact}
             errors={errors}
           />
-          <div className="w-full border border-[#969696] mt-6"></div>
+
+          <div className="border-t border-[#EDE9FB]" />
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <DepartmentSelect
               value={department}
@@ -114,6 +159,7 @@ export function InvoiceForm() {
             />
             <MerchantSelect value={merchant} onChange={setMerchant} />
           </div>
+
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <CurrencySelect
               value={currency}
@@ -122,66 +168,145 @@ export function InvoiceForm() {
             />
             <Input
               label="Package Name"
-              placeholder="Enter Package Name"
+              placeholder="e.g. Starter Plan, SEO Package…"
               value={packageName}
               onChange={(e) => setPackageName(e.target.value)}
               error={errors.packageName}
             />
           </div>
+
+          <div className="border-t border-[#EDE9FB]" />
+
+          <Input
+            label="Created By"
+            placeholder="Agent or team member name"
+            value={createdByAgent}
+            onChange={(e) => setCreatedByAgent(e.target.value)}
+            readOnly={!!agentName}
+            className={agentName ? "bg-[#F5F3FC] text-gray-600 cursor-default" : ""}
+            helper={agentName ? "Pre-filled from your agent account" : "Optional — appears in the client email"}
+          />
         </CardContent>
       </Card>
 
-      {/* Description */}
+      {/* ── 02 Description ──────────────────────────────────────────── */}
       <Card>
         <CardHeader
+          step="2"
           title="Package Description"
           description="Visible to the client on their invoice"
+          icon={<FileText className="h-3.5 w-3.5" />}
         />
         <CardContent>
           <RichTextEditor
             value={descriptionHtml}
             onChange={setDescriptionHtml}
-            placeholder="Describe the work, deliverables, or services..."
+            placeholder="Describe the work, deliverables, or services included…"
             error={errors.descriptionHtml}
           />
         </CardContent>
       </Card>
 
-      {/* Line items */}
+      {/* ── 03 Line Items ───────────────────────────────────────────── */}
       <Card>
         <CardHeader
+          step="3"
           title="Line Items"
-          description="Add items, services, or charges"
+          description="Add services, products, or charges"
+          icon={<Receipt className="h-3.5 w-3.5" />}
         />
         <CardContent>
           <LineItemsEditor
             items={items}
             onChange={setItems}
+            currency={currency}
+            taxRate={taxRate ? parseFloat(taxRate) : undefined}
             error={errors.items}
           />
         </CardContent>
       </Card>
 
-      {/* Errors */}
+      {/* ── 04 Invoice Settings ─────────────────────────────────────── */}
+      <Card className="mb-6">
+        <CardHeader
+          step="4"
+          title="Invoice Settings"
+          description="Tax, due date, and optional notes"
+          icon={<Settings2 className="h-3.5 w-3.5" />}
+        />
+        <CardContent className="space-y-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <Input
+              label="Tax Rate (%)"
+              placeholder="e.g. 10 for 10%"
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+              value={taxRate}
+              onChange={(e) => setTaxRate(e.target.value)}
+              error={errors.taxRate}
+              helper="Leave blank if no tax applies"
+            />
+            <DatePicker
+              label="Due Date"
+              value={dueDate}
+              onChange={setDueDate}
+              error={errors.dueDate}
+              helper="Defaults to 30 days if not set"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-gray-800">Notes</label>
+            <textarea
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Any additional notes or payment instructions for the client…"
+              rows={3}
+              className="w-full resize-none rounded-lg border border-[#DCC9F7] bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:border-[#4027C1] focus:ring-2 focus:ring-[#4027C1]/20"
+            />
+          </div>
+
+        </CardContent>
+      </Card>
+
+      {/* ── 05 Services Agreement ───────────────────────────────────── */}
+      <Card className="mb-5">
+        <CardHeader
+          step="5"
+          title="Services Agreement"
+          description="Optional PDF — will be attached to the client email"
+          icon={<Paperclip className="h-3.5 w-3.5" />}
+        />
+        <CardContent>
+          <PdfUpload value={agreementPdf} onChange={setAgreementPdf} />
+        </CardContent>
+        <div className="flex justify-center pt-1 pb-4">
+          <Button type="submit" loading={submitting} size="lg">
+            <Send className="h-4 w-4" />
+            {submitting ? "Creating on Stripe…" : "Create & Send Invoice"}
+          </Button>
+        </div>
+      </Card>
+
+      {/* ── Feedback banners ────────────────────────────────────────── */}
       {serverError && (
-        <div className="flex items-center gap-2 rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
           {serverError}
         </div>
       )}
       {warning && (
-        <div className="flex items-center gap-2 rounded-lg border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-400">
-          <AlertCircle className="h-4 w-4 shrink-0" />
+        <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
           {warning}
         </div>
       )}
 
-      <div className="flex justify-end">
-        <Button type="submit" loading={submitting} size="lg">
-          <Send className="h-4 w-4" />
-          {submitting ? "Creating & Sending..." : "Create & Send Invoice"}
-        </Button>
-      </div>
+     
+
+
     </form>
   );
 }

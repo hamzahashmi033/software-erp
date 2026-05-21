@@ -21,6 +21,8 @@ export type LineItem = {
 };
 
 export type InvoiceWithCounts = Invoice & {
+  stripeHostedUrl?: string | null;
+  stripeInvoiceId?: string | null;
   _count: {
     views: number;
     activeViewers: number;
