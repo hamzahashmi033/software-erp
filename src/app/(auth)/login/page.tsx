@@ -68,7 +68,7 @@ function LoginForm() {
         <p className="text-xs text-red-500">{error}</p>
       )}
 
-      <Button type="submit" loading={loading} className="w-full">
+      <Button type="submit" loading={loading} className="w-full bg-[#7430FF] ">
         Sign in
       </Button>
     </form>
@@ -81,13 +81,10 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="mb-8 flex flex-col items-center gap-3">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#2D1879] shadow-lg">
-            <Zap className="h-7 w-7 text-[#DCC9F7]" />
-          </div>
-          <div className="text-center">
-            <h1 className="text-xl font-bold text-gray-900">Leen Design Studios</h1>
-            <p className="mt-1 text-sm text-gray-500">Invoice Studio</p>
-          </div>
+          <img
+            src="/logo-v2-1.png"
+            className="h-22"
+          />
         </div>
 
         <Suspense fallback={
