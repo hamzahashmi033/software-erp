@@ -11,7 +11,7 @@ const ADMIN_PUBLIC_PATHS = [
   "/favicon.ico",
 ];
 
-const AGENT_PATHS = ["/agent/", "/api/invoices"];
+const AGENT_PATHS = ["/agent/", "/agent-login", "/api/agent/"];
 
 function isAdminPublic(pathname: string): boolean {
   return ADMIN_PUBLIC_PATHS.some((p) => pathname.startsWith(p));
@@ -24,7 +24,6 @@ function isAgentPath(pathname: string): boolean {
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Always-public paths (login pages, pay page, API webhooks)
   if (isAdminPublic(pathname)) return NextResponse.next();
   if (pathname === "/agent-login") return NextResponse.next();
 
