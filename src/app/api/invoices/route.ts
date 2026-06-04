@@ -2,9 +2,14 @@ import { db } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
 import { sendMail, buildInvoiceEmail, buildInvoiceCreatedEmail } from "@/lib/mailer";
 import { createInvoiceSchema, type LineItem } from "@/lib/validations";
+import { getAgentSession, isAuthenticated } from "@/lib/auth";
 import type { InvoiceStatus } from "@/generated/prisma/enums";
 
 export async function GET(request: Request) {
+  if (!(await isAuthenticated())) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const status = searchParams.get("status") as InvoiceStatus | null;
   const department = searchParams.get("department");
@@ -44,6 +49,11 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const [isAdmin, agentSession] = await Promise.all([isAuthenticated(), getAgentSession()]);
+    if (!isAdmin && !agentSession) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
     const parsed = createInvoiceSchema.safeParse(body);
 
@@ -55,6 +65,8 @@ export async function POST(request: Request) {
     }
 
     const data = parsed.data;
+    const createdByAgent = agentSession ? agentSession.name : data.createdByAgent;
+    const createdByAgentEmail = agentSession ? agentSession.email : data.createdByAgentEmail;
     const subtotalCents = data.items.reduce(
       (sum: number, item: LineItem) => sum + Math.round(item.quantity * item.unitPrice * 100),
       0
@@ -80,8 +92,8 @@ export async function POST(request: Request) {
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
         notes: data.notes ?? null,
         paymentMerchant: data.paymentMerchant,
-        createdByAgent: data.createdByAgent ?? null,
-        createdByAgentEmail: data.createdByAgentEmail ?? null,
+        createdByAgent: createdByAgent ?? null,
+        createdByAgentEmail: createdByAgentEmail ?? null,
         status: "DRAFT",
       },
     });
@@ -174,8 +186,8 @@ export async function POST(request: Request) {
       // 6. Send email with Stripe hosted URL
       const payUrl = hostedUrl ?? `${process.env.NEXT_PUBLIC_APP_URL}/pay/${invoice.id}`;
       const fromName = process.env.FROM_NAME ?? "Payment";
-      const agentName = data.createdByAgent ?? undefined;
-      const agentEmail = data.createdByAgentEmail ?? undefined;
+      const agentName = createdByAgent ?? undefined;
+      const agentEmail = createdByAgentEmail ?? undefined;
       const pdfAttachment = data.agreementPdfBase64
         ? {
             filename: data.agreementPdfName ?? "services-agreement.pdf",

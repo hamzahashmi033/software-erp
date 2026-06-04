@@ -98,7 +98,7 @@ export function InvoiceTable() {
       </div>
 
       {/* Table */}
-      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm">
+      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Spinner />
@@ -118,7 +118,8 @@ export function InvoiceTable() {
           />
         ) : (
           <>
-            <table className="w-full text-left">
+            <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-[700px]">
               <thead>
                 <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
                   {["Client", "Type", "Status", "Amount", "Views", "Created By", "Date", ""].map((h) => (
@@ -142,6 +143,7 @@ export function InvoiceTable() {
               </tbody>
             </table>
 
+            </div>
             <Pagination
               page={page}
               totalPages={totalPages}

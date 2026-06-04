@@ -128,7 +128,7 @@ export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormPro
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 max-w-6xl m-auto">
+    <form onSubmit={handleSubmit} className="space-y-5 max-w-6xl mx-auto px-4 sm:px-6">
 
       {/* ── 01 Customer ─────────────────────────────────────────────── */}
       <Card>

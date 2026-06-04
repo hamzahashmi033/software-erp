@@ -59,7 +59,7 @@ export default async function InvoiceDetailPage({
       <main className="flex-1 overflow-y-auto bg-[#F5F3FC]">
 
         {/* ── Hero banner ───────────────────────────────────────────── */}
-        <div className="bg-gradient-to-r from-[#2D1879] to-[#4027C1] px-6 py-8">
+        <div className="bg-gradient-to-r from-[#2D1879] to-[#4027C1] px-4 sm:px-6 py-8">
           <div className="mx-auto max-w-6xl">
             {/* back link */}
             <Link
@@ -168,7 +168,7 @@ export default async function InvoiceDetailPage({
         </div>
 
         {/* ── Body ──────────────────────────────────────────────────── */}
-        <div className="mx-auto max-w-6xl px-6 py-6">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
             {/* ── Left column (2/3) ─────────────────────────────────── */}
@@ -207,8 +207,9 @@ export default async function InvoiceDetailPage({
                       <Receipt className="h-3.5 w-3.5" />
                       Line Items
                     </p>
-                    <div className="overflow-hidden rounded-xl border border-[#DCC9F7]">
-                      <table className="w-full text-sm">
+                    <div className="rounded-xl border border-[#DCC9F7] overflow-hidden">
+                      <div className="overflow-x-auto">
+                      <table className="w-full text-sm min-w-[480px]">
                         <thead className="border-b border-[#ece8f8] bg-[#F5F3FC]">
                           <tr>
                             {["Description", "Qty", "Unit Price", "Amount"].map((h) => (
@@ -276,6 +277,7 @@ export default async function InvoiceDetailPage({
                           </tr>
                         </tfoot>
                       </table>
+                      </div>
                     </div>
                   </div>
 

@@ -90,7 +90,7 @@ export default function AgentsPage() {
           description="Create agent logins. Agents can only access the invoice creation form."
         />
 
-        <div className="px-6 pb-8 space-y-6 w-full">
+        <div className="px-4 sm:px-6 pb-8 space-y-6 w-full">
           {/* Create form */}
           <Card>
             <CardContent className="pt-6">

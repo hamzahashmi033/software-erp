@@ -20,8 +20,8 @@ export function AgentInvoicePage({ agentName, agentEmail }: { agentName: string;
   return (
     <AgentShell>
       <main>
-        <div className="mb-6 py-22 bg-[#7430FF]">
-          <h1 className="text-5xl font-bold text-center text-white">Payment Form</h1>
+        <div className="mb-6 py-10 sm:py-22 bg-[#7430FF]">
+          <h1 className="text-3xl sm:text-5xl font-bold text-center text-white">Payment Form</h1>
         </div>
 
         <InvoiceForm

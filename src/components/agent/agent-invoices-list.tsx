@@ -64,7 +64,7 @@ export function AgentInvoicesList() {
   const hasFilters = search || status;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-8 space-y-4">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-xl font-semibold text-gray-900">My Invoices</h2>
         <div className="flex flex-wrap items-center gap-3">
@@ -118,7 +118,7 @@ export function AgentInvoicesList() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm">
+      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Spinner />
@@ -130,7 +130,8 @@ export function AgentInvoicesList() {
           />
         ) : (
           <>
-            <table className="w-full text-left">
+            <div className="overflow-x-auto">
+            <table className="w-full text-left min-w-[600px]">
               <thead>
                 <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
                   {["Client", "Type", "Status", "Amount", "Views", "Date", ""].map((h) => (
@@ -219,6 +220,7 @@ export function AgentInvoicesList() {
                 })}
               </tbody>
             </table>
+            </div>
             <Pagination
               page={page}
               totalPages={totalPages}

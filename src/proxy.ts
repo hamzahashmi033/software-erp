@@ -30,6 +30,12 @@ export function proxy(request: NextRequest) {
   const adminToken = request.cookies.get("auth_token")?.value;
   const agentToken = request.cookies.get("agent_token")?.value;
   const isApi = pathname.startsWith("/api/");
+  const isAgentInvoiceCreate = pathname === "/api/invoices" && request.method === "POST";
+
+  if (isAgentInvoiceCreate) {
+    if (agentToken || adminToken) return NextResponse.next();
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   // Agent-only paths: accept agent_token OR admin_token (admin can test too)
   if (isAgentPath(pathname)) {

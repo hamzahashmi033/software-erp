@@ -49,7 +49,7 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
           placeholder="Search client..."
           value={filters.search}
           onChange={(e) => update("search", e.target.value)}
-          className="h-9 w-48 rounded-lg border border-[#DCC9F7] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+          className="h-9 w-full sm:w-48 rounded-lg border border-[#DCC9F7] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
         />
       </div>
 

@@ -143,8 +143,9 @@ export default async function PayPage({
               <Receipt className="h-3.5 w-3.5" />
               Items
             </h2>
-            <div className="overflow-hidden rounded-xl border border-[#DCC9F7]">
-              <table className="w-full text-sm">
+            <div className="rounded-xl border border-[#DCC9F7] overflow-hidden">
+              <div className="overflow-x-auto">
+              <table className="w-full text-sm min-w-[440px]">
                 <thead className="border-b border-[#EDE9FB] bg-[#F5F3FC]">
                   <tr>
                     {["Description", "Qty", "Unit Price", "Amount"].map((h) => (
@@ -207,6 +208,7 @@ export default async function PayPage({
                   </tr>
                 </tfoot>
               </table>
+              </div>
             </div>
           </section>
 

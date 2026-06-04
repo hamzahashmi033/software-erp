@@ -6,7 +6,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, action }: PageHeaderProps) {
   return (
-    <div className="flex items-start justify-between px-6 py-6">
+    <div className="flex items-start justify-between px-4 sm:px-6 py-4 sm:py-6">
       <div>
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
         {description && (

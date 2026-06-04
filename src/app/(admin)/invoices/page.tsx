@@ -24,7 +24,7 @@ export default function InvoicesPage() {
           title="All Invoices"
           description="Manage and track all your invoices"
         />
-        <div className="px-6 pb-8">
+        <div className="px-4 sm:px-6 pb-8">
           <InvoiceTable />
         </div>
       </main>

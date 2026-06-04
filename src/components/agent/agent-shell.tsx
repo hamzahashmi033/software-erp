@@ -25,10 +25,10 @@ export function AgentShell({ children }: AgentShellProps) {
 
   return (
     <div className="min-h-screen bg-[#F5F3FC]">
-      <header className="sticky top-0 z-10 border-b border-[#DCC9F7] bg-white px-6 py-3">
+      <header className="sticky top-0 z-10 border-b border-[#DCC9F7] bg-white px-4 sm:px-6 py-3">
         <div className="max-w-6xl flex items-center justify-between m-auto">
-          <div className="flex items-center gap-6">
-            <img src="/logo-v2-1.png" className="h-14 w-auto object-contain" />
+          <div className="flex items-center gap-3 sm:gap-6">
+            <img src="/logo-v2-1.png" className="h-10 sm:h-14 w-auto object-contain" />
             <nav className="flex items-center gap-1">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
@@ -45,7 +45,7 @@ export function AgentShell({ children }: AgentShellProps) {
                     ].join(" ")}
                   >
                     <Icon className="h-4 w-4" />
-                    {tab.label}
+                    <span className="hidden sm:inline">{tab.label}</span>
                   </Link>
                 );
               })}
@@ -56,7 +56,7 @@ export function AgentShell({ children }: AgentShellProps) {
             className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
           >
             <LogOut className="h-4 w-4" />
-            Sign out
+            <span className="hidden sm:inline">Sign out</span>
           </button>
         </div>
       </header>

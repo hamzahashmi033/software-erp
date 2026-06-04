@@ -40,7 +40,8 @@ export function LineItemsEditor({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="overflow-hidden rounded-xl border border-[#DCC9F7]">
+      <div className="rounded-xl border border-[#DCC9F7] overflow-hidden">
+        <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] table-fixed">
           <colgroup>
             <col />
@@ -81,6 +82,7 @@ export function LineItemsEditor({
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* Footer row: add button + totals */}

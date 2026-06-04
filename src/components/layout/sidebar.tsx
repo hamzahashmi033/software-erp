@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, FileText, PlusCircle, Users } from "lucide-react";
+import { useSidebar } from "./sidebar-context";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -13,9 +14,17 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { open, close } = useSidebar();
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col bg-[#2D1879]">
+    <aside
+      className={[
+        "flex w-60 shrink-0 flex-col bg-[#2D1879]",
+        "fixed inset-y-0 left-0 z-50 transition-transform duration-300 ease-in-out",
+        "md:relative md:translate-x-0",
+        open ? "translate-x-0" : "-translate-x-full",
+      ].join(" ")}
+    >
       <div className="flex items-center justify-center border-b border-white/10 px-5 py-4">
         <div className="rounded-xl bg-white px-8 py-4">
           <img
@@ -37,6 +46,7 @@ export function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={close}
               className={[
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 active

@@ -45,7 +45,7 @@ export default async function DashboardPage() {
           title="Overview"
           description="All invoices and revenue at a glance"
         />
-        <div className="space-y-8 px-6 pb-8">
+        <div className="space-y-8 px-4 sm:px-6 pb-8">
           <StatsGrid stats={stats} />
           <InvoiceTable />
         </div>
