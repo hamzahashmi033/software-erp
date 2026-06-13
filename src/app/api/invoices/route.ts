@@ -14,6 +14,9 @@ export async function GET(request: Request) {
   const status = searchParams.get("status") as InvoiceStatus | null;
   const department = searchParams.get("department");
   const search = searchParams.get("search");
+  const agent = searchParams.get("agent");
+  const dateFrom = searchParams.get("dateFrom");
+  const dateTo = searchParams.get("dateTo");
   const page = parseInt(searchParams.get("page") ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "20");
   const skip = (page - 1) * limit;
@@ -21,6 +24,15 @@ export async function GET(request: Request) {
   const where = {
     ...(status ? { status } : {}),
     ...(department ? { department: department as "FRONT" | "UPSELL" } : {}),
+    ...(agent ? { createdByAgentEmail: agent } : {}),
+    ...(dateFrom || dateTo
+      ? {
+          createdAt: {
+            ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+            ...(dateTo ? { lte: new Date(dateTo + "T23:59:59.999Z") } : {}),
+          },
+        }
+      : {}),
     ...(search
       ? {
           OR: [

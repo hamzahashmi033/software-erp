@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { buildAuthToken } from "@/lib/auth";
+import { buildAuthToken, isValidAdminPassword } from "@/lib/auth";
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 
@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Password required" }, { status: 400 });
   }
 
-  if (password !== process.env.ADMIN_PASSWORD) {
+  if (!(await isValidAdminPassword(password))) {
     return Response.json({ error: "Invalid password" }, { status: 401 });
   }
 

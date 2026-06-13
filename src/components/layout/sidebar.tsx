@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FileText, PlusCircle, Users } from "lucide-react";
+import { LayoutDashboard, FileText, PlusCircle, Users, Settings } from "lucide-react";
 import { useSidebar } from "./sidebar-context";
 
 const navItems = [
@@ -10,6 +10,7 @@ const navItems = [
   { href: "/invoices", label: "Invoices", icon: FileText },
   { href: "/invoices/new", label: "New Invoice", icon: PlusCircle },
   { href: "/agents", label: "Agents", icon: Users },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function Sidebar() {

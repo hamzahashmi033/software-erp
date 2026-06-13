@@ -88,3 +88,8 @@ model ActiveViewer {
   @@unique([invoiceId, sessionId])
   @@index([invoiceId, lastSeen])
 }
+
+model Setting {
+  key   String @id
+  value String @db.Text
+}
