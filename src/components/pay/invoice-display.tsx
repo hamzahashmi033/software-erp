@@ -41,7 +41,6 @@ export function InvoiceDisplay({
 
   return (
     <div>
-      {/* Header: company name + invoice meta */}
       <div className="flex items-start justify-between gap-4 px-8 pt-8 pb-6">
         <div>
           <p className="text-xl font-bold text-gray-900">{fromName}</p>
@@ -60,7 +59,6 @@ export function InvoiceDisplay({
         </div>
       </div>
 
-      {/* Amount Due block */}
       <div className="mx-8 mb-6 rounded-xl border border-gray-200 bg-gray-50 px-6 py-5">
         <div className="flex items-center justify-between gap-4">
           <div>
@@ -86,7 +84,6 @@ export function InvoiceDisplay({
         </div>
       </div>
 
-      {/* Bill to */}
       <div className="px-8 pb-6">
         <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-400">
           Bill to
@@ -98,7 +95,6 @@ export function InvoiceDisplay({
         )}
       </div>
 
-      {/* Description */}
       {descriptionHtml && descriptionHtml !== "<p></p>" && (
         <div className="border-t border-gray-100 px-8 py-6">
           <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
@@ -111,7 +107,6 @@ export function InvoiceDisplay({
         </div>
       )}
 
-      {/* Line items */}
       <div className="border-t border-gray-100">
         <InvoiceLineItemsTable items={items} currency={currency} />
       </div>

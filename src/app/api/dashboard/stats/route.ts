@@ -1,25 +1,35 @@
 import { db } from "@/lib/prisma";
+import { isAuthenticated } from "@/lib/auth";
+import { buildInvoiceWhere } from "@/lib/invoice-helpers";
 
-export async function GET() {
-  const [statusGroups, deptGroups, revenueResult] = await Promise.all([
+export async function GET(request: Request) {
+  if (!(await isAuthenticated())) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const where = buildInvoiceWhere(searchParams);
+
+  const [statusGroups, deptGroups, revenueResult, pendingRevenue] = await Promise.all([
     db.invoice.groupBy({
       by: ["status"],
+      where,
       _count: { _all: true },
     }),
     db.invoice.groupBy({
       by: ["department"],
+      where,
       _count: { _all: true },
     }),
     db.invoice.aggregate({
       _sum: { totalAmount: true },
-      where: { status: "PAID" },
+      where: { AND: [where, { status: "PAID" }] },
+    }),
+    db.invoice.aggregate({
+      _sum: { totalAmount: true },
+      where: { AND: [where, { status: { in: ["SENT", "VIEWED"] } }] },
     }),
   ]);
-
-  const pendingRevenue = await db.invoice.aggregate({
-    _sum: { totalAmount: true },
-    where: { status: { in: ["SENT", "VIEWED"] } },
-  });
 
   const counts = Object.fromEntries(
     statusGroups.map((g) => [g.status, g._count._all])

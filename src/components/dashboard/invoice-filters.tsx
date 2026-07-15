@@ -23,6 +23,17 @@ interface InvoiceFiltersProps {
   onChange: (filters: FilterState) => void;
 }
 
+export function toSearchParams(filters: FilterState): URLSearchParams {
+  const params = new URLSearchParams();
+  if (filters.search) params.set("search", filters.search);
+  if (filters.status) params.set("status", filters.status);
+  if (filters.department) params.set("department", filters.department);
+  if (filters.agent) params.set("agent", filters.agent);
+  if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
+  if (filters.dateTo) params.set("dateTo", filters.dateTo);
+  return params;
+}
+
 const STATUS_OPTIONS = [
   { value: "", label: "All Status" },
   { value: "DRAFT", label: "Draft" },
@@ -68,9 +79,23 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
     onChange({ search: "", status: "", department: "", agent: "", dateFrom: "", dateTo: "" });
   }
 
+  const monthValue =
+    filters.dateFrom && filters.dateFrom.length >= 7 ? filters.dateFrom.slice(0, 7) : "";
+
+  function updateMonth(value: string) {
+    if (!value) {
+      onChange({ ...filters, dateFrom: "", dateTo: "" });
+      return;
+    }
+    const [year, month] = value.split("-").map(Number);
+    const lastDay = new Date(year, month, 0).getDate();
+    const dateFrom = `${value}-01`;
+    const dateTo = `${value}-${String(lastDay).padStart(2, "0")}`;
+    onChange({ ...filters, dateFrom, dateTo });
+  }
+
   return (
     <div className="flex flex-wrap items-center gap-3">
-      {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-gray-400" />
         <input
@@ -82,7 +107,6 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
         />
       </div>
 
-      {/* Status */}
       <select
         value={filters.status}
         onChange={(e) => update("status", e.target.value)}
@@ -93,7 +117,6 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
         ))}
       </select>
 
-      {/* Department */}
       <select
         value={filters.department}
         onChange={(e) => update("department", e.target.value)}
@@ -104,7 +127,6 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
         ))}
       </select>
 
-      {/* Agent */}
       <select
         value={filters.agent}
         onChange={(e) => update("agent", e.target.value)}
@@ -116,7 +138,16 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
         ))}
       </select>
 
-      {/* Date From */}
+      <div className="flex items-center gap-1">
+        <span className="text-xs text-gray-400 whitespace-nowrap">Month</span>
+        <input
+          type="month"
+          value={monthValue}
+          onChange={(e) => updateMonth(e.target.value)}
+          className={inputClass + " w-36"}
+        />
+      </div>
+
       <div className="flex items-center gap-1">
         <span className="text-xs text-gray-400 whitespace-nowrap">From</span>
         <input
@@ -127,7 +158,6 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
         />
       </div>
 
-      {/* Date To */}
       <div className="flex items-center gap-1">
         <span className="text-xs text-gray-400 whitespace-nowrap">To</span>
         <input

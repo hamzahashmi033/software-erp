@@ -1,5 +1,6 @@
 import { db } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
+import { buildInvoiceWhere } from "@/lib/invoice-helpers";
 import type { InvoiceStatus } from "@/generated/prisma/enums";
 
 function escapeCSV(value: string | null | undefined): string {
@@ -24,32 +25,22 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const statusFilter = searchParams.get("statusFilter"); // "all" | "paid" | "unpaid"
+  const statusFilter = searchParams.get("statusFilter");
   const dateFrom = searchParams.get("dateFrom");
   const dateTo = searchParams.get("dateTo");
-  const agent = searchParams.get("agent");
-  const department = searchParams.get("department");
 
-  let statusWhere: object = {};
-  if (statusFilter === "paid") {
-    statusWhere = { status: "PAID" as InvoiceStatus };
-  } else if (statusFilter === "unpaid") {
-    statusWhere = { status: { notIn: ["PAID", "VOID"] as InvoiceStatus[] } };
+  const baseWhere = buildInvoiceWhere(searchParams);
+
+  let statusOverride: object = {};
+  if (!searchParams.get("status")) {
+    if (statusFilter === "paid") {
+      statusOverride = { status: "PAID" as InvoiceStatus };
+    } else if (statusFilter === "unpaid") {
+      statusOverride = { status: { notIn: ["PAID", "VOID"] as InvoiceStatus[] } };
+    }
   }
 
-  const where = {
-    ...statusWhere,
-    ...(department ? { department: department as "FRONT" | "UPSELL" } : {}),
-    ...(agent ? { createdByAgentEmail: agent } : {}),
-    ...(dateFrom || dateTo
-      ? {
-          createdAt: {
-            ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
-            ...(dateTo ? { lte: new Date(dateTo + "T23:59:59.999Z") } : {}),
-          },
-        }
-      : {}),
-  };
+  const where = { ...baseWhere, ...statusOverride };
 
   const invoices = await db.invoice.findMany({
     where,

@@ -58,10 +58,8 @@ export default async function InvoiceDetailPage({
       <TopBar title="Invoice Detail" />
       <main className="flex-1 overflow-y-auto bg-[#F5F3FC]">
 
-        {/* ── Hero banner ───────────────────────────────────────────── */}
         <div className="bg-gradient-to-r from-[#2D1879] to-[#4027C1] px-4 sm:px-6 py-8">
           <div className="mx-auto max-w-6xl">
-            {/* back link */}
             <Link
               href="/invoices"
               className="mb-5 inline-flex items-center gap-1.5 text-xs text-[#DCC9F7] hover:text-white transition-colors"
@@ -71,7 +69,6 @@ export default async function InvoiceDetailPage({
             </Link>
 
             <div className="flex flex-wrap items-start justify-between gap-4">
-              {/* client info */}
               <div className="flex items-center gap-4">
                 <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-2xl font-bold text-white ring-2 ring-white/20">
                   {invoice.clientName.charAt(0).toUpperCase()}
@@ -89,7 +86,6 @@ export default async function InvoiceDetailPage({
                 </div>
               </div>
 
-              {/* amount + actions */}
               <div className="flex flex-col items-end gap-3">
                 <div className="text-right">
                   <p className="text-xs font-medium uppercase tracking-wider text-[#DCC9F7]">
@@ -126,7 +122,6 @@ export default async function InvoiceDetailPage({
               </div>
             </div>
 
-            {/* quick stats row */}
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {[
                 {
@@ -167,14 +162,11 @@ export default async function InvoiceDetailPage({
           </div>
         </div>
 
-        {/* ── Body ──────────────────────────────────────────────────── */}
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 
-            {/* ── Left column (2/3) ─────────────────────────────────── */}
             <div className="space-y-6 lg:col-span-2">
 
-              {/* Invoice meta */}
               <Card>
                 <CardHeader
                   title="Invoice Details"
@@ -182,7 +174,6 @@ export default async function InvoiceDetailPage({
                 />
                 <CardContent className="space-y-5">
 
-                  {/* description */}
                   {invoice.descriptionHtml &&
                     invoice.descriptionHtml !== "<p></p>" && (
                       <div>
@@ -201,7 +192,6 @@ export default async function InvoiceDetailPage({
                       </div>
                     )}
 
-                  {/* line items */}
                   <div>
                     <p className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[#4027C1]">
                       <Receipt className="h-3.5 w-3.5" />
@@ -245,7 +235,6 @@ export default async function InvoiceDetailPage({
                           ))}
                         </tbody>
 
-                        {/* totals footer */}
                         <tfoot className="border-t border-[#DCC9F7] bg-[#F5F3FC]">
                           {invoice.taxRate != null && invoice.taxRate > 0 && (
                             <>
@@ -281,7 +270,6 @@ export default async function InvoiceDetailPage({
                     </div>
                   </div>
 
-                  {/* notes */}
                   {invoice.notes && (
                     <div>
                       <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-[#4027C1]">
@@ -296,7 +284,6 @@ export default async function InvoiceDetailPage({
                 </CardContent>
               </Card>
 
-              {/* View history */}
               <Card>
                 <CardHeader
                   title="View History"
@@ -334,10 +321,8 @@ export default async function InvoiceDetailPage({
               </Card>
             </div>
 
-            {/* ── Right sidebar (1/3) ───────────────────────────────── */}
             <div className="space-y-6">
 
-              {/* Payment link */}
               {stripeUrl ? (
                 <Card>
                   <CardHeader title="Payment Link" />
@@ -401,7 +386,6 @@ export default async function InvoiceDetailPage({
                 </Card>
               )}
 
-              {/* Timeline */}
               <Card>
                 <CardHeader title="Timeline" />
                 <CardContent>
@@ -428,7 +412,6 @@ export default async function InvoiceDetailPage({
                           : "text-[#4027C1]";
                         return (
                           <li key={label} className="flex gap-3">
-                            {/* dot + connector column */}
                             <div className="flex flex-col items-center">
                               <div
                                 className={[
@@ -442,7 +425,6 @@ export default async function InvoiceDetailPage({
                                 <div className="w-0.5 flex-1 bg-[#ece8f8] my-1" />
                               )}
                             </div>
-                            {/* text */}
                             <div className={["pt-1", isLast ? "pb-0" : "pb-5"].join(" ")}>
                               <p className="text-xs font-semibold text-gray-800">{label}</p>
                               <p className="text-xs text-gray-400">
@@ -464,7 +446,6 @@ export default async function InvoiceDetailPage({
                 </CardContent>
               </Card>
 
-              {/* Client info card */}
               <Card>
                 <CardHeader title="Client" />
                 <CardContent className="space-y-3">

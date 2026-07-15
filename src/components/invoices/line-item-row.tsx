@@ -26,7 +26,6 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
 
   return (
     <tr className="group border-t border-[#ece8f8] hover:bg-[#faf9ff] transition-colors">
-      {/* Description */}
       <td className="px-3 py-2.5">
         <input
           type="text"
@@ -37,7 +36,6 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
         />
       </td>
 
-      {/* Qty */}
       <td className="px-3 py-2.5 w-[90px]">
         <input
           type="number"
@@ -48,7 +46,6 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
         />
       </td>
 
-      {/* Unit Price */}
       <td className="px-3 py-2.5 w-[130px]">
         <div className="relative">
           <span className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-medium text-gray-400">
@@ -65,14 +62,12 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
         </div>
       </td>
 
-      {/* Subtotal */}
       <td className="px-3 py-2.5 w-[110px] text-right">
         <span className="text-sm font-semibold text-[#2D1879]">
           {formatCurrency(subtotal, currency)}
         </span>
       </td>
 
-      {/* Remove */}
       <td className="py-2.5 pr-3 w-10 text-center">
         <button
           type="button"

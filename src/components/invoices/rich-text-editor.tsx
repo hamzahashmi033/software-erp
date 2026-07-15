@@ -71,7 +71,6 @@ export function RichTextEditor({
           "focus-within:ring-2 focus-within:ring-[#4027C1] focus-within:border-transparent",
         ].join(" ")}
       >
-        {/* Toolbar */}
         <div className="flex items-center gap-0.5 border-b border-[#ece8f8] bg-[#F5F3FC] px-2 py-1.5">
           <ToolbarButton title="Bold" onClick={() => editor?.chain().focus().toggleBold().run()} active={editor?.isActive("bold")}>
             <Bold className="h-4 w-4" />

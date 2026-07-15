@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { PlusCircle, RefreshCw, Download } from "lucide-react";
 import { InvoiceTableRow } from "./invoice-table-row";
-import { InvoiceFilters, type FilterState } from "./invoice-filters";
+import { InvoiceFilters, toSearchParams, type FilterState } from "./invoice-filters";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -13,36 +13,27 @@ import type { InvoiceWithCounts } from "@/types/invoice";
 
 const LIMIT = 10;
 
-export function InvoiceTable() {
+interface InvoiceTableProps {
+  filters: FilterState;
+  onFiltersChange: (filters: FilterState) => void;
+}
+
+export function InvoiceTable({ filters, onFiltersChange }: InvoiceTableProps) {
   const [invoices, setInvoices] = useState<InvoiceWithCounts[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState<FilterState>({
-    search: "",
-    status: "",
-    department: "",
-    agent: "",
-    dateFrom: "",
-    dateTo: "",
-  });
   const [downloading, setDownloading] = useState<string | null>(null);
 
   function handleFiltersChange(newFilters: FilterState) {
     setPage(1);
-    setFilters(newFilters);
+    onFiltersChange(newFilters);
   }
 
   const fetchInvoices = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams();
-      if (filters.search) params.set("search", filters.search);
-      if (filters.status) params.set("status", filters.status);
-      if (filters.department) params.set("department", filters.department);
-      if (filters.agent) params.set("agent", filters.agent);
-      if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
-      if (filters.dateTo) params.set("dateTo", filters.dateTo);
+      const params = toSearchParams(filters);
       params.set("page", String(page));
       params.set("limit", String(LIMIT));
 
@@ -74,12 +65,8 @@ export function InvoiceTable() {
   }, [fetchInvoices]);
 
   function buildExportParams(statusFilter: "all" | "paid" | "unpaid"): string {
-    const params = new URLSearchParams();
+    const params = toSearchParams(filters);
     params.set("statusFilter", statusFilter);
-    if (filters.dateFrom) params.set("dateFrom", filters.dateFrom);
-    if (filters.dateTo) params.set("dateTo", filters.dateTo);
-    if (filters.agent) params.set("agent", filters.agent);
-    if (filters.department) params.set("department", filters.department);
     return params.toString();
   }
 
@@ -107,14 +94,11 @@ export function InvoiceTable() {
 
   return (
     <div className="space-y-4">
-      {/* Filters row */}
       <div className="flex flex-wrap items-start gap-3">
         <InvoiceFilters filters={filters} onChange={handleFiltersChange} />
       </div>
 
-      {/* Toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        {/* Download buttons */}
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs font-medium text-gray-500">Download:</span>
           {(
@@ -153,7 +137,6 @@ export function InvoiceTable() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">

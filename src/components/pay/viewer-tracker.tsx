@@ -20,10 +20,8 @@ export function ViewerTracker({ invoiceId }: ViewerTrackerProps) {
   );
 
   useEffect(() => {
-    // Record view once
     fetch(`/api/pay/${invoiceId}/view`, { method: "POST" }).catch(() => {});
 
-    // Heartbeat every 20s
     const sendHeartbeat = () => {
       fetch(`/api/pay/${invoiceId}/heartbeat`, {
         method: "POST",

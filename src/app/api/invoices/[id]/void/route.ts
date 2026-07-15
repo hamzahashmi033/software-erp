@@ -16,7 +16,6 @@ export async function POST(
     try {
       await stripe.invoices.voidInvoice(invoice.stripeInvoiceId);
     } catch {
-      // Invoice may already be void or uncollectible — ignore
     }
   }
 

@@ -1,4 +1,35 @@
-import { InvoiceStatus } from "@/generated/prisma/enums";
+import { InvoiceStatus, Department } from "@/generated/prisma/enums";
+
+export function buildInvoiceWhere(searchParams: URLSearchParams) {
+  const status = searchParams.get("status") as InvoiceStatus | null;
+  const department = searchParams.get("department") as Department | null;
+  const search = searchParams.get("search");
+  const agent = searchParams.get("agent");
+  const dateFrom = searchParams.get("dateFrom");
+  const dateTo = searchParams.get("dateTo");
+
+  return {
+    ...(status ? { status } : {}),
+    ...(department ? { department } : {}),
+    ...(agent ? { createdByAgentEmail: agent } : {}),
+    ...(dateFrom || dateTo
+      ? {
+          createdAt: {
+            ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+            ...(dateTo ? { lte: new Date(dateTo + "T23:59:59.999Z") } : {}),
+          },
+        }
+      : {}),
+    ...(search
+      ? {
+          OR: [
+            { clientName: { contains: search, mode: "insensitive" as const } },
+            { clientEmail: { contains: search, mode: "insensitive" as const } },
+          ],
+        }
+      : {}),
+  };
+}
 
 export function formatCurrency(amountInCents: number, currency = "usd") {
   return new Intl.NumberFormat("en-US", {

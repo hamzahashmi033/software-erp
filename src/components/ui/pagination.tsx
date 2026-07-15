@@ -30,7 +30,6 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
 
   return (
     <div className="flex flex-col items-center justify-between gap-3 border-t border-[#ece8f8] px-5 py-4 sm:flex-row">
-      {/* Info */}
       <p className="text-xs text-gray-400">
         Showing{" "}
         <span className="font-semibold text-gray-600">
@@ -40,9 +39,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
         <span className="font-semibold text-gray-600">{total}</span> invoices
       </p>
 
-      {/* Controls */}
       <div className="flex items-center gap-1">
-        {/* Prev */}
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
@@ -52,7 +49,6 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
           Prev
         </button>
 
-        {/* Page numbers */}
         <div className="flex items-center gap-1">
           {pages.map((p, i) =>
             p === "…" ? (
@@ -80,7 +76,6 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
           )}
         </div>
 
-        {/* Next */}
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}

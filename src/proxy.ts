@@ -37,14 +37,12 @@ export function proxy(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Agent-only paths: accept agent_token OR admin_token (admin can test too)
   if (isAgentPath(pathname)) {
     if (agentToken || adminToken) return NextResponse.next();
     if (isApi) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     return NextResponse.redirect(new URL("/agent-login", request.url));
   }
 
-  // Admin paths: require admin token
   if (!adminToken) {
     if (isApi) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     const loginUrl = new URL("/login", request.url);

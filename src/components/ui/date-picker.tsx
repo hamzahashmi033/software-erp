@@ -124,7 +124,6 @@ export function DatePicker({
 
         {open && (
           <div className="absolute z-50 mt-1 w-72 rounded-xl border border-[#DCC9F7] bg-white p-3 shadow-xl shadow-[#4027C1]/10">
-            {/* Month nav */}
             <div className="mb-3 flex items-center justify-between">
               <button
                 type="button"
@@ -145,7 +144,6 @@ export function DatePicker({
               </button>
             </div>
 
-            {/* Day headers */}
             <div className="mb-1 grid grid-cols-7">
               {DAY_LABELS.map((d) => (
                 <div key={d} className="py-1 text-center text-xs font-medium text-gray-400">
@@ -154,7 +152,6 @@ export function DatePicker({
               ))}
             </div>
 
-            {/* Day cells */}
             <div className="grid grid-cols-7 gap-y-0.5">
               {grid.map((day, i) => {
                 if (day === null) return <div key={i} />;
@@ -187,7 +184,6 @@ export function DatePicker({
               })}
             </div>
 
-            {/* Quick picks */}
             <div className="mt-3 flex gap-2 border-t border-[#EDE9FB] pt-3">
               {[
                 { label: "+7 days", days: 7 },

@@ -38,8 +38,6 @@ export async function sendMail({ to, subject, html, text, attachments }: MailOpt
   });
 }
 
-// ── Shared helpers ────────────────────────────────────────────────────────────
-
 function fmt(amountCents: number, currency: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -105,9 +103,6 @@ function invoiceEmailShell(body: string) {
 </body>
 </html>`.trim();
 }
-
-
-// ── Client invoice email ──────────────────────────────────────────────────────
 
 export function buildInvoiceEmail(params: {
   clientName: string;
@@ -182,8 +177,6 @@ export function buildInvoiceEmail(params: {
     </table>
   `);
 }
-
-// ── Admin: invoice created notification ──────────────────────────────────────
 
 export function buildInvoiceCreatedEmail(params: {
   clientName: string;
@@ -260,8 +253,6 @@ export function buildInvoiceCreatedEmail(params: {
   `);
 }
 
-// ── Client: payment success thank-you ────────────────────────────────────────
-
 export function buildPaymentSuccessClientEmail(params: {
   clientName: string;
   invoiceId: string;
@@ -298,8 +289,6 @@ export function buildPaymentSuccessClientEmail(params: {
     </p>
   `);
 }
-
-// ── Client: payment failed retry nudge ───────────────────────────────────────
 
 export function buildPaymentFailedClientEmail(params: {
   clientName: string;
@@ -342,8 +331,6 @@ export function buildPaymentFailedClientEmail(params: {
     </table>
   `);
 }
-
-// ── Admin: payment received notification ─────────────────────────────────────
 
 export function buildPaymentNotificationEmail(params: {
   clientName: string;

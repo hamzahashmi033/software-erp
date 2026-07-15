@@ -41,12 +41,10 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
     <div className="min-h-screen bg-gradient-to-br from-[#2D1879] via-[#3d22a0] to-[#1a0d4a] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl">
 
-        {/* Header */}
         <div className="bg-[#2D1879] px-8 py-6 flex items-center justify-center">
           <img src="/logo-v2-1.png" alt="Leen Design Studios" className="h-16 w-auto object-contain brightness-0 invert" />
         </div>
 
-        {/* Body */}
         <div className="bg-white px-8 py-8">
           <h1 className="text-xl font-bold text-[#4027C1] mb-4">Your Invoice is Ready!</h1>
 
@@ -58,7 +56,6 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             details. Please review the information below and proceed with the payment.
           </p>
 
-          {/* Invoice Summary */}
           <h2 className="text-base font-bold text-[#4027C1] mb-3">Invoice Summary</h2>
           <table className="w-full mb-8 border-t border-gray-100">
             <tbody>
@@ -73,7 +70,6 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             </tbody>
           </table>
 
-          {/* Package Details */}
           <h2 className="text-base font-bold text-[#4027C1] mb-3">Package Details</h2>
           <table className="w-full mb-8 border-t border-gray-100">
             <tbody>
@@ -92,7 +88,6 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             </tbody>
           </table>
 
-          {/* Agent info */}
           {invoice.createdByAgent && (
             <div className="mb-6 rounded-lg border border-[#EDE9FB] bg-[#F5F3FC] px-4 py-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-[#4027C1] mb-0.5">Agent</p>
@@ -105,7 +100,6 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             </div>
           )}
 
-          {/* CTA */}
           <div className="flex flex-col items-center gap-3">
             <a
               href={payUrl}
@@ -124,7 +118,6 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="bg-gray-50 border-t border-gray-100 px-8 py-5 text-center">
           <p className="text-xs text-gray-500">
             Need assistance? Reach out to us at{" "}

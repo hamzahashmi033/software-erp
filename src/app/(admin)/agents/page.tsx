@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Users, Plus, Trash2, Eye, EyeOff, AlertCircle, CheckCircle } from "lucide-react";
+import { Users, Plus, Trash2, Eye, EyeOff, AlertCircle, CheckCircle, KeyRound } from "lucide-react";
 import { TopBar } from "@/components/layout/top-bar";
 import { PageHeader } from "@/components/layout/page-header";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,13 @@ export default function AgentsPage() {
   const [formSuccess, setFormSuccess] = useState("");
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const [passwordEditId, setPasswordEditId] = useState<string | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSuccessId, setPasswordSuccessId] = useState<string | null>(null);
 
   const fetchAgents = useCallback(async () => {
     setLoading(true);
@@ -81,6 +88,48 @@ export default function AgentsPage() {
     }
   }
 
+  function openPasswordEditor(id: string) {
+    setPasswordEditId(id);
+    setNewPassword("");
+    setShowNewPassword(false);
+    setPasswordError("");
+    setPasswordSuccessId(null);
+  }
+
+  function closePasswordEditor() {
+    setPasswordEditId(null);
+    setNewPassword("");
+    setPasswordError("");
+  }
+
+  async function handlePasswordSave(id: string) {
+    setPasswordError("");
+    if (newPassword.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      const res = await fetch(`/api/agents/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password: newPassword }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPasswordError(data.error ?? "Failed to update password.");
+        return;
+      }
+      setPasswordEditId(null);
+      setNewPassword("");
+      setPasswordSuccessId(id);
+    } catch {
+      setPasswordError("Network error. Please try again.");
+    } finally {
+      setSavingPassword(false);
+    }
+  }
+
   return (
     <div className="flex flex-col flex-1 overflow-hidden ">
       <TopBar title="Agents" />
@@ -91,7 +140,6 @@ export default function AgentsPage() {
         />
 
         <div className="px-4 sm:px-6 pb-8 space-y-6 w-full">
-          {/* Create form */}
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-5">
@@ -164,7 +212,6 @@ export default function AgentsPage() {
             </CardContent>
           </Card>
 
-          {/* Agent list */}
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-5">
@@ -184,21 +231,87 @@ export default function AgentsPage() {
               ) : (
                 <div className="divide-y divide-[#EDE9FB]">
                   {agents.map((agent) => (
-                    <div key={agent.id} className="flex items-center justify-between py-3">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">{agent.name}</p>
-                        <p className="text-xs text-gray-400">
-                          {agent.email} &nbsp;·&nbsp; Created {new Date(agent.createdAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
-                        </p>
+                    <div key={agent.id} className="py-3">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">{agent.name}</p>
+                          <p className="text-xs text-gray-400">
+                            {agent.email} &nbsp;·&nbsp; Created {new Date(agent.createdAt).toLocaleDateString("en-US", { dateStyle: "medium" })}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() =>
+                              passwordEditId === agent.id
+                                ? closePasswordEditor()
+                                : openPasswordEditor(agent.id)
+                            }
+                            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-[#4027C1] hover:bg-[#F5F3FC] transition-colors"
+                          >
+                            <KeyRound className="h-3.5 w-3.5" />
+                            Change Password
+                          </button>
+                          <button
+                            onClick={() => handleDelete(agent.id, agent.name)}
+                            disabled={deletingId === agent.id}
+                            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            {deletingId === agent.id ? "Deleting…" : "Delete"}
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        onClick={() => handleDelete(agent.id, agent.name)}
-                        disabled={deletingId === agent.id}
-                        className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-red-500 hover:bg-red-50 transition-colors disabled:opacity-40"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                        {deletingId === agent.id ? "Deleting…" : "Delete"}
-                      </button>
+
+                      {passwordEditId === agent.id && (
+                        <div className="mt-3 flex flex-wrap items-start gap-2 rounded-lg border border-[#DCC9F7] bg-[#F5F3FC] p-3">
+                          <div className="relative flex-1 min-w-[180px]">
+                            <input
+                              type={showNewPassword ? "text" : "password"}
+                              placeholder="New password (min. 6 characters)"
+                              value={newPassword}
+                              onChange={(e) => setNewPassword(e.target.value)}
+                              minLength={6}
+                              autoFocus
+                              className="h-9 w-full rounded-lg border border-[#DCC9F7] bg-white pl-3 pr-9 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowNewPassword((v) => !v)}
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#4027C1]"
+                            >
+                              {showNewPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                            </button>
+                          </div>
+                          <Button
+                            size="sm"
+                            type="button"
+                            loading={savingPassword}
+                            onClick={() => handlePasswordSave(agent.id)}
+                          >
+                            Save
+                          </Button>
+                          <button
+                            type="button"
+                            onClick={closePasswordEditor}
+                            className="h-9 rounded-lg px-3 text-xs text-gray-500 hover:bg-white transition-colors"
+                          >
+                            Cancel
+                          </button>
+                          {passwordError && (
+                            <div className="flex w-full items-center gap-2 text-xs text-red-600">
+                              <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                              {passwordError}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {passwordSuccessId === agent.id && (
+                        <div className="mt-3 flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-xs text-green-700">
+                          <CheckCircle className="h-3.5 w-3.5 shrink-0" />
+                          Password updated successfully.
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -206,7 +319,6 @@ export default function AgentsPage() {
             </CardContent>
           </Card>
 
-          {/* Portal link hint */}
           <div className="rounded-xl border border-[#DCC9F7] bg-[#F5F3FC] px-4 py-3 text-sm text-gray-600">
             Agent login portal:{" "}
             <span className="font-mono text-[#4027C1]">

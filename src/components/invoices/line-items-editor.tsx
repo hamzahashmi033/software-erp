@@ -85,7 +85,6 @@ export function LineItemsEditor({
         </div>
       </div>
 
-      {/* Footer row: add button + totals */}
       <div className="flex items-end justify-between gap-4">
         <button
           type="button"

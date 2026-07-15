@@ -10,8 +10,6 @@ function sign(value: string): string {
   return createHmac("sha256", secret).update(value).digest("hex");
 }
 
-// ── Admin auth ────────────────────────────────────────────────────────────────
-
 export function buildAuthToken(password: string): string {
   const hash = sign(password);
   return Buffer.from(`${password}:${hash}`).toString("base64");
@@ -50,8 +48,6 @@ export async function getAdminPassword(): Promise<string> {
 }
 
 export { isValidAdminPassword };
-
-// ── Agent auth ────────────────────────────────────────────────────────────────
 
 export function hashPassword(password: string): string {
   const salt = randomBytes(16).toString("hex");

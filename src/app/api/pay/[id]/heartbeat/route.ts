@@ -1,6 +1,6 @@
 import { db } from "@/lib/prisma";
 
-const ACTIVE_WINDOW_MS = 30_000; // 30 seconds
+const ACTIVE_WINDOW_MS = 30_000;
 
 export async function POST(
   request: Request,

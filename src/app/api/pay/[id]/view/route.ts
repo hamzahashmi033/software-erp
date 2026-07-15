@@ -17,7 +17,6 @@ export async function POST(
     null;
   const userAgent = request.headers.get("user-agent") ?? null;
 
-  // Deduplicate: skip if same IP + UA viewed within the last 60s
   const recentView = await db.invoiceView.findFirst({
     where: {
       invoiceId: id,
@@ -32,7 +31,6 @@ export async function POST(
       data: { invoiceId: id, ip, userAgent },
     });
 
-    // Upgrade status from SENT → VIEWED (never downgrade from PAID/VOID)
     if (invoice.status === "SENT") {
       await db.invoice.update({
         where: { id },

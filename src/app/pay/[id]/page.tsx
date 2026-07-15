@@ -50,7 +50,6 @@ export default async function PayPage({
 
       <article className="overflow-hidden rounded-2xl bg-white shadow-xl shadow-[#4027C1]/10 ring-1 ring-[#DCC9F7]">
 
-        {/* ── Paid banner ───────────────────────────────────────────── */}
         {isPaid && (
           <div className="flex items-center justify-center gap-2 bg-emerald-500 px-6 py-3">
             <CheckCircle2 className="h-4 w-4 text-white" />
@@ -60,7 +59,6 @@ export default async function PayPage({
           </div>
         )}
 
-        {/* ── Invoice header ────────────────────────────────────────── */}
         <header className="bg-gradient-to-r from-[#2D1879] to-[#4027C1] px-8 py-8">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -77,7 +75,6 @@ export default async function PayPage({
             </div>
           </div>
 
-          {/* meta chips */}
           <div className="mt-6 flex flex-wrap gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs text-white">
               <FileText className="h-3 w-3" />
@@ -99,7 +96,6 @@ export default async function PayPage({
 
         <div className="px-8 py-8 space-y-8">
 
-          {/* ── Bill To ───────────────────────────────────────────────── */}
           <section aria-label="Bill to">
             <h2 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-[#4027C1]">
               <User className="h-3.5 w-3.5" />
@@ -119,7 +115,6 @@ export default async function PayPage({
             </address>
           </section>
 
-          {/* ── Description ───────────────────────────────────────────── */}
           {invoice.descriptionHtml && invoice.descriptionHtml !== "<p></p>" && (
             <section aria-label="Description">
               <h2 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-[#4027C1]">
@@ -137,7 +132,6 @@ export default async function PayPage({
             </section>
           )}
 
-          {/* ── Line items ────────────────────────────────────────────── */}
           <section aria-label="Line items">
             <h2 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-[#4027C1]">
               <Receipt className="h-3.5 w-3.5" />
@@ -212,7 +206,6 @@ export default async function PayPage({
             </div>
           </section>
 
-          {/* ── Notes ─────────────────────────────────────────────────── */}
           {invoice.notes && (
             <section aria-label="Notes">
               <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#4027C1]">
@@ -224,7 +217,6 @@ export default async function PayPage({
             </section>
           )}
 
-          {/* ── CTA ───────────────────────────────────────────────────── */}
           {isPaid ? (
             <div className="flex items-center justify-center gap-3 rounded-xl bg-emerald-50 px-6 py-5 ring-1 ring-emerald-200">
               <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-500" />

@@ -3,7 +3,6 @@ const fromName = process.env.FROM_NAME ?? "Invoice";
 export default function PayLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F5F3FC] via-[#EDE9FB] to-[#DCC9F7]">
-      {/* Top brand bar */}
       <header className="bg-white/80 backdrop-blur-sm border-b border-[#DCC9F7] px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto max-w-2xl flex items-center justify-between">
           <div className="flex items-center gap-2.5">

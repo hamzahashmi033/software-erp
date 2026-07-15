@@ -29,7 +29,6 @@ export async function POST(
   } else if (si.status === "void" && invoice.status !== "VOID") {
     updates.status = "VOID";
   } else if (si.status === "open" && invoice.status === "PAYMENT_FAILED") {
-    // Payment retry brought it back to open
     updates.status = "SENT";
   }
 

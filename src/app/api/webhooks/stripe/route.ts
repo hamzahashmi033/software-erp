@@ -65,7 +65,6 @@ export async function POST(request: Request) {
     const billingEmail = process.env.BILLING_EMAIL;
 
     await Promise.all([
-      // Client thank-you email
       sendMail({
         to: dbInvoice.clientEmail,
         subject: `Payment confirmed — thank you, ${dbInvoice.clientName}!`,
@@ -78,7 +77,6 @@ export async function POST(request: Request) {
           fromName,
         }),
       }),
-      // Admin notification
       ...(billingEmail
         ? [
             sendMail({

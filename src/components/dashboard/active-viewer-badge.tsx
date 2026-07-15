@@ -20,7 +20,6 @@ export function ActiveViewerBadge({ invoiceId }: ActiveViewerBadgeProps) {
         const data = await res.json();
         if (!cancelled) setCount(data.count ?? 0);
       } catch {
-        // Ignore network errors
       }
     }
 

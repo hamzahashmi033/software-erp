@@ -3,7 +3,7 @@ import { stripe } from "@/lib/stripe";
 import { sendMail, buildInvoiceEmail, buildInvoiceCreatedEmail } from "@/lib/mailer";
 import { createInvoiceSchema, type LineItem } from "@/lib/validations";
 import { getAgentSession, isAuthenticated } from "@/lib/auth";
-import type { InvoiceStatus } from "@/generated/prisma/enums";
+import { buildInvoiceWhere } from "@/lib/invoice-helpers";
 
 export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
@@ -11,37 +11,10 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const status = searchParams.get("status") as InvoiceStatus | null;
-  const department = searchParams.get("department");
-  const search = searchParams.get("search");
-  const agent = searchParams.get("agent");
-  const dateFrom = searchParams.get("dateFrom");
-  const dateTo = searchParams.get("dateTo");
   const page = parseInt(searchParams.get("page") ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "20");
   const skip = (page - 1) * limit;
-
-  const where = {
-    ...(status ? { status } : {}),
-    ...(department ? { department: department as "FRONT" | "UPSELL" } : {}),
-    ...(agent ? { createdByAgentEmail: agent } : {}),
-    ...(dateFrom || dateTo
-      ? {
-          createdAt: {
-            ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
-            ...(dateTo ? { lte: new Date(dateTo + "T23:59:59.999Z") } : {}),
-          },
-        }
-      : {}),
-    ...(search
-      ? {
-          OR: [
-            { clientName: { contains: search, mode: "insensitive" as const } },
-            { clientEmail: { contains: search, mode: "insensitive" as const } },
-          ],
-        }
-      : {}),
-  };
+  const where = buildInvoiceWhere(searchParams);
 
   const [invoices, total] = await Promise.all([
     db.invoice.findMany({
@@ -88,7 +61,6 @@ export async function POST(request: Request) {
       : 0;
     const totalCents = subtotalCents + taxCents;
 
-    // Save draft record first so we have an ID for Stripe metadata
     const invoice = await db.invoice.create({
       data: {
         clientName: data.clientName,
@@ -111,7 +83,6 @@ export async function POST(request: Request) {
     });
 
     try {
-      // 1. Create or find Stripe customer
       const existing = await stripe.customers.list({ email: data.clientEmail, limit: 1 });
       let customerId: string;
       if (existing.data.length > 0) {
@@ -126,9 +97,6 @@ export async function POST(request: Request) {
         customerId = customer.id;
       }
 
-      // 2. Create Stripe invoice in draft
-      // Parse date-only strings as end-of-day UTC so selecting "today" still gives
-      // a future timestamp. Then apply a 1-hour safety floor.
       const nowSec = Math.floor(Date.now() / 1000);
       let dueDateUnix: number;
       if (data.dueDate) {
@@ -150,8 +118,6 @@ export async function POST(request: Request) {
         metadata: { invoiceId: invoice.id },
       });
 
-      // 3. Create invoice items — `amount` is the line total; Stripe rejects
-      //    `quantity` when `amount` is also set, so we embed qty in the description.
       for (const item of data.items) {
         const lineDescription =
           item.quantity > 1
@@ -166,7 +132,6 @@ export async function POST(request: Request) {
         });
       }
 
-      // 4. Apply tax rate if provided
       if (data.taxRate && data.taxRate > 0) {
         const taxRate = await stripe.taxRates.create({
           display_name: "Tax",
@@ -178,7 +143,6 @@ export async function POST(request: Request) {
         });
       }
 
-      // 5. Finalize the invoice — this locks it and generates the hosted URL
       const finalized = await stripe.invoices.finalizeInvoice(stripeInvoice.id);
       const hostedUrl = finalized.hosted_invoice_url ?? null;
       const finalAmount = finalized.amount_due;
@@ -195,7 +159,6 @@ export async function POST(request: Request) {
         },
       });
 
-      // 6. Send email with Stripe hosted URL
       const payUrl = hostedUrl ?? `${process.env.NEXT_PUBLIC_APP_URL}/pay/${invoice.id}`;
       const fromName = process.env.FROM_NAME ?? "Payment";
       const agentName = createdByAgent ?? undefined;
@@ -228,14 +191,12 @@ export async function POST(request: Request) {
       const billingEmail = process.env.BILLING_EMAIL;
 
       await Promise.all([
-        // Client email (with optional PDF attachment)
         sendMail({
           to: data.clientEmail,
           subject: `Invoice from ${fromName}`,
           html: emailHtml,
           attachments: pdfAttachment ? [pdfAttachment] : undefined,
         }),
-        // Billing team notification
         ...(billingEmail
           ? [
               sendMail({
