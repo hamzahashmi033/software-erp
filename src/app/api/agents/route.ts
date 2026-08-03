@@ -1,10 +1,16 @@
 import { db } from "@/lib/prisma";
 import { isAuthenticated, hashPassword, getAgentRoleId } from "@/lib/auth";
+import { isFakeAgentDataEnabled, FAKE_AGENTS } from "@/lib/fake-data/agents";
 
 export async function GET() {
   if (!(await isAuthenticated())) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  if (isFakeAgentDataEnabled()) {
+    return Response.json({ agents: FAKE_AGENTS });
+  }
+
   const agents = await db.user.findMany({
     where: { Role: { slug: "agent" } },
     orderBy: { createdAt: "desc" },
