@@ -2,8 +2,8 @@ const fromName = process.env.FROM_NAME ?? "Invoice";
 
 export default function PayLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5F3FC] via-[#EDE9FB] to-[#DCC9F7]">
-      <header className="bg-white/80 backdrop-blur-sm border-b border-[#DCC9F7] px-6 py-4 sticky top-0 z-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFF7ED] via-[#FFEDD5] to-[#FED7AA]">
+      <header className="bg-white/80 backdrop-blur-sm border-b border-[#FED7AA] px-6 py-4 sticky top-0 z-10">
         <div className="mx-auto max-w-2xl flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,7 +29,7 @@ export default function PayLayout({ children }: { children: React.ReactNode }) {
       <footer className="py-8 text-center">
         <p className="text-xs text-[#9b8ec4]">
           {fromName} &nbsp;·&nbsp; Payments powered by{" "}
-          <span className="font-medium text-[#4027C1]">Stripe</span>
+          <span className="font-medium text-[#EA580C]">Stripe</span>
           &nbsp;·&nbsp; Your payment is secure and encrypted
         </p>
       </footer>

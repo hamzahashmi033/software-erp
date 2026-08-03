@@ -1,6 +1,7 @@
 import { db } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 import { buildInvoiceWhere } from "@/lib/invoice-helpers";
+import { isFakeInvoiceDataEnabled, filterFakeInvoices } from "@/lib/fake-data/invoices";
 
 export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
@@ -8,6 +9,38 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
+
+  if (isFakeInvoiceDataEnabled()) {
+    const invoices = filterFakeInvoices(searchParams);
+    const total = invoices.length;
+    const paid = invoices.filter((i) => i.status === "PAID").length;
+    const sent = invoices.filter((i) => i.status === "SENT").length;
+    const viewed = invoices.filter((i) => i.status === "VIEWED").length;
+    const draft = invoices.filter((i) => i.status === "DRAFT").length;
+    const voidCount = invoices.filter((i) => i.status === "VOID").length;
+    const totalRevenue = invoices
+      .filter((i) => i.status === "PAID")
+      .reduce((sum, i) => sum + i.totalAmount, 0);
+    const pendingRevenue = invoices
+      .filter((i) => i.status === "SENT" || i.status === "VIEWED")
+      .reduce((sum, i) => sum + i.totalAmount, 0);
+    const frontCount = invoices.filter((i) => i.department === "FRONT").length;
+    const upsellCount = invoices.filter((i) => i.department === "UPSELL").length;
+
+    return Response.json({
+      total,
+      paid,
+      sent,
+      viewed,
+      draft,
+      void: voidCount,
+      totalRevenue,
+      pendingRevenue,
+      frontCount,
+      upsellCount,
+    });
+  }
+
   const where = buildInvoiceWhere(searchParams);
 
   const [statusGroups, deptGroups, revenueResult, pendingRevenue] = await Promise.all([

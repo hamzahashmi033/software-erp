@@ -24,8 +24,8 @@ export function AgentShell({ children }: AgentShellProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F5F3FC]">
-      <header className="sticky top-0 z-10 border-b border-[#DCC9F7] bg-white px-4 sm:px-6 py-3">
+    <div className="min-h-screen bg-[#FFF7ED]">
+      <header className="sticky top-0 z-10 border-b border-[#FED7AA] bg-white px-4 sm:px-6 py-3">
         <div className="max-w-6xl flex items-center justify-between m-auto">
           <div className="flex items-center gap-3 sm:gap-6">
             <img src="/logo-v2-1.png" className="h-10 sm:h-14 w-auto object-contain" />
@@ -40,8 +40,8 @@ export function AgentShell({ children }: AgentShellProps) {
                     className={[
                       "flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                       active
-                        ? "bg-[#DCC9F7] text-[#2D1879]"
-                        : "text-gray-500 hover:bg-[#F5F3FC] hover:text-gray-800",
+                        ? "bg-[#FED7AA] text-[#7C2D12]"
+                        : "text-gray-500 hover:bg-[#FFF7ED] hover:text-gray-800",
                     ].join(" ")}
                   >
                     <Icon className="h-4 w-4" />

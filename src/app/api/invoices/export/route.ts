@@ -1,6 +1,7 @@
 import { db } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 import { buildInvoiceWhere } from "@/lib/invoice-helpers";
+import { isFakeInvoiceDataEnabled, filterFakeInvoices } from "@/lib/fake-data/invoices";
 import type { InvoiceStatus } from "@/generated/prisma/enums";
 
 function escapeCSV(value: string | null | undefined): string {
@@ -29,23 +30,37 @@ export async function GET(request: Request) {
   const dateFrom = searchParams.get("dateFrom");
   const dateTo = searchParams.get("dateTo");
 
-  const baseWhere = buildInvoiceWhere(searchParams);
+  let invoices: { id: string; clientName: string; clientEmail: string; clientContact: string | null; packageName: string | null; department: string; status: string; totalAmount: number; currency: string; createdByAgent: string | null; createdByAgentEmail: string | null; createdAt: Date; sentAt: Date | null; paidAt: Date | null; dueDate: Date | null }[];
 
-  let statusOverride: object = {};
-  if (!searchParams.get("status")) {
-    if (statusFilter === "paid") {
-      statusOverride = { status: "PAID" as InvoiceStatus };
-    } else if (statusFilter === "unpaid") {
-      statusOverride = { status: { notIn: ["PAID", "VOID"] as InvoiceStatus[] } };
+  if (isFakeInvoiceDataEnabled()) {
+    let filtered = filterFakeInvoices(searchParams);
+    if (!searchParams.get("status")) {
+      if (statusFilter === "paid") {
+        filtered = filtered.filter((inv) => inv.status === "PAID");
+      } else if (statusFilter === "unpaid") {
+        filtered = filtered.filter((inv) => inv.status !== "PAID" && inv.status !== "VOID");
+      }
     }
+    invoices = filtered;
+  } else {
+    const baseWhere = buildInvoiceWhere(searchParams);
+
+    let statusOverride: object = {};
+    if (!searchParams.get("status")) {
+      if (statusFilter === "paid") {
+        statusOverride = { status: "PAID" as InvoiceStatus };
+      } else if (statusFilter === "unpaid") {
+        statusOverride = { status: { notIn: ["PAID", "VOID"] as InvoiceStatus[] } };
+      }
+    }
+
+    const where = { ...baseWhere, ...statusOverride };
+
+    invoices = await db.invoice.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+    });
   }
-
-  const where = { ...baseWhere, ...statusOverride };
-
-  const invoices = await db.invoice.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-  });
 
   const headers = [
     "Invoice ID",

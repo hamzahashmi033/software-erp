@@ -68,8 +68,8 @@ export default function SettingsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EDE9FB]">
-                  <Lock className="h-4 w-4 text-[#4027C1]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFEDD5]">
+                  <Lock className="h-4 w-4 text-[#EA580C]" />
                 </div>
                 <h2 className="text-sm font-semibold text-gray-900">Change Admin Password</h2>
               </div>
@@ -87,7 +87,7 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => setShowCurrent((v) => !v)}
-                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#4027C1]"
+                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#EA580C]"
                   >
                     {showCurrent ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -106,7 +106,7 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => setShowNew((v) => !v)}
-                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#4027C1]"
+                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#EA580C]"
                   >
                     {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -124,7 +124,7 @@ export default function SettingsPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirm((v) => !v)}
-                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#4027C1]"
+                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#EA580C]"
                   >
                     {showConfirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>

@@ -112,7 +112,7 @@ export function InvoiceTable({ filters, onFiltersChange }: InvoiceTableProps) {
               key={key}
               onClick={() => handleDownload(key)}
               disabled={downloading !== null}
-              className="flex items-center gap-1.5 rounded-lg border border-[#DCC9F7] bg-white px-3 py-1.5 text-xs font-medium text-[#4027C1] hover:bg-[#F5F3FC] transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 rounded-lg border border-[#FED7AA] bg-white px-3 py-1.5 text-xs font-medium text-[#EA580C] hover:bg-[#FFF7ED] transition-colors disabled:opacity-50"
             >
               <Download className={["h-3.5 w-3.5", downloading === key ? "animate-bounce" : ""].join(" ")} />
               {label} CSV
@@ -123,7 +123,7 @@ export function InvoiceTable({ filters, onFiltersChange }: InvoiceTableProps) {
         <div className="flex items-center gap-2">
           <button
             onClick={fetchInvoices}
-            className="rounded-md p-2 text-gray-400 hover:bg-[#DCC9F7] hover:text-[#2D1879] transition-colors"
+            className="rounded-md p-2 text-gray-400 hover:bg-[#FED7AA] hover:text-[#7C2D12] transition-colors"
             title="Refresh"
           >
             <RefreshCw className={["h-4 w-4", loading ? "animate-spin" : ""].join(" ")} />
@@ -137,7 +137,7 @@ export function InvoiceTable({ filters, onFiltersChange }: InvoiceTableProps) {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-[#FED7AA] bg-white shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Spinner />
@@ -160,11 +160,11 @@ export function InvoiceTable({ filters, onFiltersChange }: InvoiceTableProps) {
             <div className="overflow-x-auto">
               <table className="w-full text-left min-w-[700px]">
                 <thead>
-                  <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
+                  <tr className="border-b border-[#FFEDD5] bg-[#FFF7ED]">
                     {["Client", "Type", "Status", "Amount", "Views", "Created By", "Date", ""].map((h) => (
                       <th
                         key={h}
-                        className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#4027C1]"
+                        className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#EA580C]"
                       >
                         {h}
                       </th>

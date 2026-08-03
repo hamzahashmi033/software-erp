@@ -20,11 +20,11 @@ export function TopBar({ title, action }: TopBarProps) {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#DCC9F7] bg-white px-4 sm:px-6">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-[#FED7AA] bg-white px-4 sm:px-6">
       <div className="flex items-center gap-3">
         <button
           onClick={toggle}
-          className="rounded-lg p-1.5 text-gray-500 hover:bg-[#F5F3FC] transition-colors md:hidden"
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-[#FFF7ED] transition-colors md:hidden"
           aria-label="Toggle menu"
         >
           <Menu className="h-5 w-5" />

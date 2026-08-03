@@ -6,7 +6,6 @@ const ADMIN_PUBLIC_PATHS = [
   "/api/auth",
   "/api/webhooks",
   "/api/pay",
-  "/api/debug",
   "/_next",
   "/favicon.ico",
 ];
@@ -25,7 +24,7 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isAdminPublic(pathname)) return NextResponse.next();
-  if (pathname === "/agent-login") return NextResponse.next();
+  if (pathname === "/agent-login" || pathname === "/staff-login") return NextResponse.next();
 
   const adminToken = request.cookies.get("auth_token")?.value;
   const agentToken = request.cookies.get("agent_token")?.value;

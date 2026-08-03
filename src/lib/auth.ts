@@ -5,7 +5,7 @@ import { db } from "@/lib/prisma";
 const ADMIN_COOKIE = "auth_token";
 const AGENT_COOKIE = "agent_token";
 
-function sign(value: string): string {
+export function sign(value: string): string {
   const secret = process.env.AUTH_COOKIE_SECRET ?? "fallback-secret";
   return createHmac("sha256", secret).update(value).digest("hex");
 }
@@ -101,3 +101,9 @@ export async function getAgentSession(): Promise<{ id: string; name: string; ema
 }
 
 export { AGENT_COOKIE };
+
+export async function getAgentRoleId(): Promise<string> {
+  const role = await db.role.findUnique({ where: { slug: "agent" } });
+  if (!role) throw new Error("Agent role is not seeded in the Role table");
+  return role.id;
+}

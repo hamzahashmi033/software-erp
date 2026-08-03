@@ -38,15 +38,15 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
   const amount = fmt(invoice.totalAmount, invoice.currency);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#2D1879] via-[#3d22a0] to-[#1a0d4a] flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-[#7C2D12] via-[#3d22a0] to-[#1a0d4a] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl">
 
-        <div className="bg-[#2D1879] px-8 py-6 flex items-center justify-center">
+        <div className="bg-[#7C2D12] px-8 py-6 flex items-center justify-center">
           <img src="/logo-v2-1.png" alt="Leen Design Studios" className="h-16 w-auto object-contain brightness-0 invert" />
         </div>
 
         <div className="bg-white px-8 py-8">
-          <h1 className="text-xl font-bold text-[#4027C1] mb-4">Your Invoice is Ready!</h1>
+          <h1 className="text-xl font-bold text-[#EA580C] mb-4">Your Invoice is Ready!</h1>
 
           <p className="text-sm text-gray-800 mb-1">
             Dear <strong>{invoice.clientName}</strong>,
@@ -56,7 +56,7 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             details. Please review the information below and proceed with the payment.
           </p>
 
-          <h2 className="text-base font-bold text-[#4027C1] mb-3">Invoice Summary</h2>
+          <h2 className="text-base font-bold text-[#EA580C] mb-3">Invoice Summary</h2>
           <table className="w-full mb-8 border-t border-gray-100">
             <tbody>
               <Row label="Customer Name:" value={invoice.clientName} />
@@ -70,7 +70,7 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
             </tbody>
           </table>
 
-          <h2 className="text-base font-bold text-[#4027C1] mb-3">Package Details</h2>
+          <h2 className="text-base font-bold text-[#EA580C] mb-3">Package Details</h2>
           <table className="w-full mb-8 border-t border-gray-100">
             <tbody>
               {invoice.packageName && (
@@ -89,11 +89,11 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
           </table>
 
           {invoice.createdByAgent && (
-            <div className="mb-6 rounded-lg border border-[#EDE9FB] bg-[#F5F3FC] px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-[#4027C1] mb-0.5">Agent</p>
+            <div className="mb-6 rounded-lg border border-[#FFEDD5] bg-[#FFF7ED] px-4 py-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#EA580C] mb-0.5">Agent</p>
               <p className="text-sm font-semibold text-gray-900">{invoice.createdByAgent}</p>
               {invoice.createdByAgentEmail && (
-                <a href={`mailto:${invoice.createdByAgentEmail}`} className="text-xs text-[#4027C1]">
+                <a href={`mailto:${invoice.createdByAgentEmail}`} className="text-xs text-[#EA580C]">
                   {invoice.createdByAgentEmail}
                 </a>
               )}
@@ -105,13 +105,13 @@ export function AgentInvoiceSuccess({ invoice, onCreateAnother }: Props) {
               href={payUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block w-full max-w-xs text-center rounded-lg bg-[#4027C1] px-8 py-3 text-sm font-bold text-white shadow-sm hover:bg-[#2D1879] transition-colors"
+              className="inline-block w-full max-w-xs text-center rounded-lg bg-[#EA580C] px-8 py-3 text-sm font-bold text-white shadow-sm hover:bg-[#7C2D12] transition-colors"
             >
               Pay Invoice
             </a>
             <button
               onClick={onCreateAnother}
-              className="text-sm text-gray-400 hover:text-[#4027C1] transition-colors"
+              className="text-sm text-gray-400 hover:text-[#EA580C] transition-colors"
             >
               Create another invoice
             </button>

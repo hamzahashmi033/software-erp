@@ -76,7 +76,7 @@ export function InvoiceDisplay({
           ) : (
             <a
               href="#payment-form"
-              className="inline-flex items-center rounded-lg bg-[#4027C1] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#2D1879]"
+              className="inline-flex items-center rounded-lg bg-[#EA580C] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#7C2D12]"
             >
               Pay now
             </a>

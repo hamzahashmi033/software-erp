@@ -15,7 +15,7 @@ export function Card({ children, className = "" }: CardProps) {
   return (
     <div
       className={[
-        "rounded-xl border border-[#DCC9F7] bg-white shadow-sm",
+        "rounded-xl border border-[#FED7AA] bg-white shadow-sm",
         className,
       ].join(" ")}
     >
@@ -26,15 +26,15 @@ export function Card({ children, className = "" }: CardProps) {
 
 export function CardHeader({ title, description, action, step, icon }: CardHeaderProps) {
   return (
-    <div className="flex items-start justify-between border-b border-[#ece8f8] px-6 py-4">
+    <div className="flex items-start justify-between border-b border-[#FFEDD5] px-6 py-4">
       <div className="flex items-center gap-3">
         {step && (
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#4027C1] to-[#2D1879] text-xs font-bold text-white shadow-sm">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#EA580C] to-[#7C2D12] text-xs font-bold text-white shadow-sm">
             {step}
           </span>
         )}
         {icon && !step && (
-          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#F5F3FC] text-[#4027C1]">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[#FFF7ED] text-[#EA580C]">
             {icon}
           </span>
         )}

@@ -51,7 +51,7 @@ const DEPT_OPTIONS = [
 ];
 
 const inputClass =
-  "h-9 rounded-lg border border-[#DCC9F7] bg-white px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#4027C1]";
+  "h-9 rounded-lg border border-[#FED7AA] bg-white px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#EA580C]";
 
 export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -103,7 +103,7 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
           placeholder="Search client..."
           value={filters.search}
           onChange={(e) => update("search", e.target.value)}
-          className="h-9 w-full sm:w-48 rounded-lg border border-[#DCC9F7] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+          className="h-9 w-full sm:w-48 rounded-lg border border-[#FED7AA] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
         />
       </div>
 
@@ -171,7 +171,7 @@ export function InvoiceFilters({ filters, onChange }: InvoiceFiltersProps) {
       {hasFilters && (
         <button
           onClick={clearAll}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#4027C1] transition-colors"
+          className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#EA580C] transition-colors"
         >
           <X className="h-3.5 w-3.5" />
           Clear

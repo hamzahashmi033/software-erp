@@ -12,7 +12,9 @@ export async function POST(request: Request) {
     return Response.json({ error: "Email and password required" }, { status: 400 });
   }
 
-  const agent = await db.agent.findUnique({ where: { email } });
+  const agent = await db.user.findFirst({
+    where: { email, isActive: true, Role: { slug: "agent" } },
+  });
   if (!agent || !verifyPassword(password, agent.passwordHash)) {
     return Response.json({ error: "Invalid credentials" }, { status: 401 });
   }

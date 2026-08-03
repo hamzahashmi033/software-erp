@@ -40,7 +40,7 @@ export function LineItemsEditor({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="rounded-xl border border-[#DCC9F7] overflow-hidden">
+      <div className="rounded-xl border border-[#FED7AA] overflow-hidden">
         <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] table-fixed">
           <colgroup>
@@ -51,7 +51,7 @@ export function LineItemsEditor({
             <col className="w-10" />
           </colgroup>
           <thead>
-            <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
+            <tr className="border-b border-[#FFEDD5] bg-[#FFF7ED]">
               {[
                 { label: "Description", align: "text-left" },
                 { label: "Qty", align: "text-center" },
@@ -61,7 +61,7 @@ export function LineItemsEditor({
               ].map((h) => (
                 <th
                   key={h.label}
-                  className={`px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-[#4027C1] ${h.align}`}
+                  className={`px-3 py-2.5 text-xs font-semibold uppercase tracking-wide text-[#EA580C] ${h.align}`}
                 >
                   {h.label}
                 </th>
@@ -89,13 +89,13 @@ export function LineItemsEditor({
         <button
           type="button"
           onClick={() => onChange([...items, emptyItem()])}
-          className="flex items-center gap-2 rounded-lg border border-dashed border-[#DCC9F7] px-4 py-2 text-sm text-[#4027C1] transition-colors hover:border-[#4027C1] hover:bg-[#F5F3FC]"
+          className="flex items-center gap-2 rounded-lg border border-dashed border-[#FED7AA] px-4 py-2 text-sm text-[#EA580C] transition-colors hover:border-[#EA580C] hover:bg-[#FFF7ED]"
         >
           <PlusCircle className="h-4 w-4" />
           Add line item
         </button>
 
-        <div className="min-w-[220px] rounded-xl border border-[#DCC9F7] bg-[#F5F3FC] px-5 py-3 text-right">
+        <div className="min-w-[220px] rounded-xl border border-[#FED7AA] bg-[#FFF7ED] px-5 py-3 text-right">
           {taxRate && taxRate > 0 ? (
             <>
               <div className="mb-1 flex items-center justify-between gap-6 text-sm text-gray-500">
@@ -106,10 +106,10 @@ export function LineItemsEditor({
                 <span>Tax ({taxRate}%)</span>
                 <span>{formatCurrency(taxCents, currency)}</span>
               </div>
-              <div className="border-t border-[#DCC9F7] pt-2.5">
+              <div className="border-t border-[#FED7AA] pt-2.5">
                 <div className="flex items-center justify-between gap-6">
                   <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Total</span>
-                  <span className="text-xl font-extrabold text-[#2D1879]">
+                  <span className="text-xl font-extrabold text-[#7C2D12]">
                     {formatCurrency(totalCents, currency)}
                   </span>
                 </div>
@@ -118,7 +118,7 @@ export function LineItemsEditor({
           ) : (
             <div className="flex items-center justify-between gap-6">
               <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">Total</span>
-              <span className="text-xl font-extrabold text-[#2D1879]">
+              <span className="text-xl font-extrabold text-[#7C2D12]">
                 {formatCurrency(totalCents, currency)}
               </span>
             </div>

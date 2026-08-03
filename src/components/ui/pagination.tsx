@@ -29,7 +29,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
     "flex h-8 min-w-[32px] items-center justify-center rounded-lg px-2 text-sm font-medium transition-all";
 
   return (
-    <div className="flex flex-col items-center justify-between gap-3 border-t border-[#ece8f8] px-5 py-4 sm:flex-row">
+    <div className="flex flex-col items-center justify-between gap-3 border-t border-[#FFEDD5] px-5 py-4 sm:flex-row">
       <p className="text-xs text-gray-400">
         Showing{" "}
         <span className="font-semibold text-gray-600">
@@ -43,7 +43,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
-          className={`${btnBase} gap-1 pl-2.5 pr-3 text-gray-500 hover:bg-[#F5F3FC] hover:text-[#4027C1] disabled:cursor-not-allowed disabled:opacity-30`}
+          className={`${btnBase} gap-1 pl-2.5 pr-3 text-gray-500 hover:bg-[#FFF7ED] hover:text-[#EA580C] disabled:cursor-not-allowed disabled:opacity-30`}
         >
           <ChevronLeft className="h-3.5 w-3.5" />
           Prev
@@ -66,8 +66,8 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
                   btnBase,
                   "w-8",
                   p === page
-                    ? "bg-[#4027C1] text-white shadow-sm shadow-[#4027C1]/30"
-                    : "text-gray-600 hover:bg-[#F5F3FC] hover:text-[#4027C1]",
+                    ? "bg-[#EA580C] text-white shadow-sm shadow-[#EA580C]/30"
+                    : "text-gray-600 hover:bg-[#FFF7ED] hover:text-[#EA580C]",
                 ].join(" ")}
               >
                 {p}
@@ -79,7 +79,7 @@ export function Pagination({ page, totalPages, total, limit, onPageChange }: Pag
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={page === totalPages}
-          className={`${btnBase} gap-1 pl-3 pr-2.5 text-gray-500 hover:bg-[#F5F3FC] hover:text-[#4027C1] disabled:cursor-not-allowed disabled:opacity-30`}
+          className={`${btnBase} gap-1 pl-3 pr-2.5 text-gray-500 hover:bg-[#FFF7ED] hover:text-[#EA580C] disabled:cursor-not-allowed disabled:opacity-30`}
         >
           Next
           <ChevronRight className="h-3.5 w-3.5" />

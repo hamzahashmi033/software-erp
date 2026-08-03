@@ -58,9 +58,9 @@ export function PdfUpload({ value, onChange, error }: PdfUploadProps) {
 
   if (value) {
     return (
-      <div className="flex items-center gap-3 rounded-xl border border-[#DCC9F7] bg-[#F5F3FC] px-4 py-3">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#EDE9FB]">
-          <FileText className="h-4 w-4 text-[#4027C1]" />
+      <div className="flex items-center gap-3 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#FFEDD5]">
+          <FileText className="h-4 w-4 text-[#EA580C]" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="truncate text-sm font-medium text-gray-900">{value.name}</p>
@@ -89,20 +89,20 @@ export function PdfUpload({ value, onChange, error }: PdfUploadProps) {
         className={[
           "w-full rounded-xl border-2 border-dashed px-6 py-10 text-center transition-all",
           dragging
-            ? "border-[#4027C1] bg-[#EDE9FB]"
-            : "border-[#DCC9F7] bg-[#F5F3FC] hover:border-[#4027C1] hover:bg-[#EDE9FB]",
+            ? "border-[#EA580C] bg-[#FFEDD5]"
+            : "border-[#FED7AA] bg-[#FFF7ED] hover:border-[#EA580C] hover:bg-[#FFEDD5]",
           displayError ? "border-red-300 bg-red-50" : "",
         ].join(" ")}
       >
         <CloudUpload
           className={[
             "mx-auto mb-3 h-8 w-8",
-            displayError ? "text-red-400" : dragging ? "text-[#4027C1]" : "text-[#9d8fd4]",
+            displayError ? "text-red-400" : dragging ? "text-[#EA580C]" : "text-[#9d8fd4]",
           ].join(" ")}
         />
         <p className="text-sm font-medium text-gray-700">
           Drag &amp; drop a PDF here, or{" "}
-          <span className="text-[#4027C1] underline underline-offset-2">click to browse</span>
+          <span className="text-[#EA580C] underline underline-offset-2">click to browse</span>
         </p>
         <p className="mt-1 text-xs text-gray-400">PDF only · Max {MAX_MB}MB</p>
       </button>

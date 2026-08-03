@@ -4,6 +4,7 @@ import { sendMail, buildInvoiceEmail, buildInvoiceCreatedEmail } from "@/lib/mai
 import { createInvoiceSchema, type LineItem } from "@/lib/validations";
 import { getAgentSession, isAuthenticated } from "@/lib/auth";
 import { buildInvoiceWhere } from "@/lib/invoice-helpers";
+import { isFakeInvoiceDataEnabled, filterFakeInvoices } from "@/lib/fake-data/invoices";
 
 export async function GET(request: Request) {
   if (!(await isAuthenticated())) {
@@ -14,6 +15,17 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get("page") ?? "1");
   const limit = parseInt(searchParams.get("limit") ?? "20");
   const skip = (page - 1) * limit;
+
+  if (isFakeInvoiceDataEnabled()) {
+    const filtered = filterFakeInvoices(searchParams);
+    const total = filtered.length;
+    const invoices = filtered.slice(skip, skip + limit).map((inv) => ({
+      ...inv,
+      _count: { views: inv.views.length, activeViewers: 0 },
+    }));
+    return Response.json({ invoices, total, page, limit });
+  }
+
   const where = buildInvoiceWhere(searchParams);
 
   const [invoices, total] = await Promise.all([

@@ -78,7 +78,7 @@ export function AgentInvoicesList() {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="h-9 w-48 rounded-lg border border-[#DCC9F7] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+              className="h-9 w-48 rounded-lg border border-[#FED7AA] bg-white pl-8 pr-3 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
             />
           </div>
           <select
@@ -87,7 +87,7 @@ export function AgentInvoicesList() {
               setStatus(e.target.value);
               setPage(1);
             }}
-            className="h-9 rounded-lg border border-[#DCC9F7] bg-white px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+            className="h-9 rounded-lg border border-[#FED7AA] bg-white px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
           >
             {STATUS_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -102,7 +102,7 @@ export function AgentInvoicesList() {
                 setStatus("");
                 setPage(1);
               }}
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#4027C1] transition-colors"
+              className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#EA580C] transition-colors"
             >
               <X className="h-3.5 w-3.5" />
               Clear
@@ -110,7 +110,7 @@ export function AgentInvoicesList() {
           )}
           <button
             onClick={fetchInvoices}
-            className="rounded-md p-2 text-gray-400 hover:bg-[#DCC9F7] hover:text-[#2D1879] transition-colors"
+            className="rounded-md p-2 text-gray-400 hover:bg-[#FED7AA] hover:text-[#7C2D12] transition-colors"
             title="Refresh"
           >
             <RefreshCw className={["h-4 w-4", loading ? "animate-spin" : ""].join(" ")} />
@@ -118,7 +118,7 @@ export function AgentInvoicesList() {
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#DCC9F7] bg-white shadow-sm overflow-hidden">
+      <div className="rounded-xl border border-[#FED7AA] bg-white shadow-sm overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <Spinner />
@@ -133,11 +133,11 @@ export function AgentInvoicesList() {
             <div className="overflow-x-auto">
             <table className="w-full text-left min-w-[600px]">
               <thead>
-                <tr className="border-b border-[#ece8f8] bg-[#F5F3FC]">
+                <tr className="border-b border-[#FFEDD5] bg-[#FFF7ED]">
                   {["Client", "Type", "Status", "Amount", "Views", "Date", ""].map((h) => (
                     <th
                       key={h}
-                      className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#4027C1]"
+                      className="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-[#EA580C]"
                     >
                       {h}
                     </th>
@@ -149,12 +149,12 @@ export function AgentInvoicesList() {
                   const stripeHostedUrl = (invoice as { stripeHostedUrl?: string }).stripeHostedUrl;
                   const departmentColor =
                     invoice.department === "FRONT"
-                      ? "text-[#4027C1] bg-[#DCC9F7]"
+                      ? "text-[#EA580C] bg-[#FED7AA]"
                       : "text-purple-800 bg-purple-100";
                   return (
                     <tr
                       key={invoice.id}
-                      className="border-t border-[#ece8f8] hover:bg-[#F5F3FC] transition-colors"
+                      className="border-t border-[#FFEDD5] hover:bg-[#FFF7ED] transition-colors"
                     >
                       <td className="px-4 py-3">
                         <p className="font-medium text-gray-900">{invoice.clientName}</p>
@@ -195,7 +195,7 @@ export function AgentInvoicesList() {
                               target="_blank"
                               rel="noopener noreferrer"
                               title="Open invoice"
-                              className="rounded-md p-1.5 text-[#4027C1] hover:bg-[#DCC9F7] transition-colors"
+                              className="rounded-md p-1.5 text-[#EA580C] hover:bg-[#FED7AA] transition-colors"
                             >
                               <ExternalLink className="h-4 w-4" />
                             </a>
@@ -204,7 +204,7 @@ export function AgentInvoicesList() {
                             <button
                               onClick={() => handleCopyLink(invoice)}
                               title="Copy invoice link"
-                              className="rounded-md p-1.5 text-gray-400 hover:bg-[#DCC9F7] hover:text-[#2D1879] transition-colors"
+                              className="rounded-md p-1.5 text-gray-400 hover:bg-[#FED7AA] hover:text-[#7C2D12] transition-colors"
                             >
                               {copiedId === invoice.id ? (
                                 <Check className="h-4 w-4 text-emerald-500" />

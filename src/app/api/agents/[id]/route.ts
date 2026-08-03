@@ -6,7 +6,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id } = await params;
-  await db.agent.delete({ where: { id } });
+  await db.user.delete({ where: { id } });
   return Response.json({ ok: true });
 }
 
@@ -22,7 +22,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return Response.json({ error: "Password must be at least 6 characters" }, { status: 400 });
   }
 
-  await db.agent.update({
+  await db.user.update({
     where: { id },
     data: { passwordHash: hashPassword(password) },
   });

@@ -70,7 +70,7 @@ function invoiceEmailShell(body: string) {
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" role="presentation" style="max-width:600px;width:100%;border-radius:16px;overflow:hidden;border:1px solid #e5e7eb;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
         <tr>
-          <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:3px solid #4027C1;">
+          <td style="background:#ffffff;padding:28px 32px 20px;text-align:center;border-bottom:3px solid #EA580C;">
            
           <a href="https://leendesignstudio.com/" target="_blank" rel="noopener noreferrer" style="display:inline-block;">
             <img src="${logoUrl}" alt="Leen Design Studios" height="60" style="height:60px;width:auto;display:block;margin:0 auto;border:0;" />
@@ -132,7 +132,7 @@ export function buildInvoiceEmail(params: {
       Thank you for choosing <strong>Leen Design Studios</strong>. Here&rsquo;s a summary of your invoice details. Please review the information below and proceed with the payment.
     </p>
 
-    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#4027C1;">Invoice Summary</h2>
+    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#EA580C;">Invoice Summary</h2>
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;margin-bottom:32px;">
       ${emailRow("Customer Name:", clientName)}
       ${emailRow("Customer Email:", clientEmail)}
@@ -142,7 +142,7 @@ export function buildInvoiceEmail(params: {
       ${emailRow("Total Amount:", `<strong>${amount}</strong>`)}
     </table>
 
-    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#4027C1;">Package Details</h2>
+    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#EA580C;">Package Details</h2>
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;margin-bottom:32px;">
       ${packageName ? emailRow("Package Name:", packageName) : ""}
       ${emailRow("Package Description:", descriptionHtml)}
@@ -151,8 +151,8 @@ export function buildInvoiceEmail(params: {
     ${hasAgreement ? `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
       <tr>
-        <td style="background:#F5F3FC;border:1px solid #EDE9FB;border-radius:8px;padding:12px 16px;">
-          <p style="margin:0;font-size:13px;color:#4027C1;font-weight:500;">A Services Agreement PDF has been attached to this email.</p>
+        <td style="background:#FFF7ED;border:1px solid #FFEDD5;border-radius:8px;padding:12px 16px;">
+          <p style="margin:0;font-size:13px;color:#EA580C;font-weight:500;">A Services Agreement PDF has been attached to this email.</p>
         </td>
       </tr>
     </table>` : ""}
@@ -160,10 +160,10 @@ export function buildInvoiceEmail(params: {
     ${agentName ? `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
       <tr>
-        <td style="background:#F5F3FC;border:1px solid #EDE9FB;border-radius:8px;padding:12px 16px;">
-          <p style="margin:0 0 2px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4027C1;">Agent</p>
+        <td style="background:#FFF7ED;border:1px solid #FFEDD5;border-radius:8px;padding:12px 16px;">
+          <p style="margin:0 0 2px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#EA580C;">Agent</p>
           <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#111827;">${agentName}</p>
-          ${agentEmail ? `<a href="mailto:${agentEmail}" style="font-size:12px;color:#4027C1;text-decoration:none;">${agentEmail}</a>` : ""}
+          ${agentEmail ? `<a href="mailto:${agentEmail}" style="font-size:12px;color:#EA580C;text-decoration:none;">${agentEmail}</a>` : ""}
         </td>
       </tr>
     </table>` : ""}
@@ -171,7 +171,7 @@ export function buildInvoiceEmail(params: {
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding-top:8px;">
-          <a href="${payUrl}" style="display:inline-block;background:#4027C1;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">Pay Invoice</a>
+          <a href="${payUrl}" style="display:inline-block;background:#EA580C;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">Pay Invoice</a>
         </td>
       </tr>
     </table>
@@ -200,23 +200,23 @@ export function buildInvoiceCreatedEmail(params: {
   const invoiceNum = `#${invoiceId.slice(-8).toUpperCase()}`;
 
   return invoiceEmailShell(`
-    <h1 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#4027C1;">New Invoice Created</h1>
+    <h1 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#EA580C;">New Invoice Created</h1>
 
     <p style="margin:0 0 32px;font-size:14px;color:#6b7280;line-height:1.6;">
       A new invoice has been generated for a client. Here&rsquo;s a summary of the details.
     </p>
 
-    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#4027C1;">Invoice Summary</h2>
+    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#EA580C;">Invoice Summary</h2>
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;margin-bottom:32px;">
       ${emailRow("Customer Name:", clientName)}
-      ${emailRow("Customer Email:", `<a href="mailto:${clientEmail}" style="color:#4027C1;text-decoration:none;">${clientEmail}</a>`)}
+      ${emailRow("Customer Email:", `<a href="mailto:${clientEmail}" style="color:#EA580C;text-decoration:none;">${clientEmail}</a>`)}
       ${clientContact ? emailRow("Customer Contact:", clientContact) : ""}
       ${emailRow("Invoice Number:", invoiceNum)}
       ${emailRow("Invoice Date:", date)}
       ${emailRow("Total Amount:", `<strong>${amount}</strong>`)}
     </table>
 
-    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#4027C1;">Package Details</h2>
+    <h2 style="margin:0 0 12px;font-size:15px;font-weight:700;color:#EA580C;">Package Details</h2>
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;margin-bottom:32px;">
       ${packageName ? emailRow("Package Name:", packageName) : ""}
       ${emailRow("Package Description:", descriptionHtml)}
@@ -225,8 +225,8 @@ export function buildInvoiceCreatedEmail(params: {
     ${hasAgreement ? `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
       <tr>
-        <td style="background:#F5F3FC;border:1px solid #EDE9FB;border-radius:8px;padding:12px 16px;">
-          <p style="margin:0;font-size:13px;color:#4027C1;font-weight:500;">A Services Agreement PDF was attached to the client email.</p>
+        <td style="background:#FFF7ED;border:1px solid #FFEDD5;border-radius:8px;padding:12px 16px;">
+          <p style="margin:0;font-size:13px;color:#EA580C;font-weight:500;">A Services Agreement PDF was attached to the client email.</p>
         </td>
       </tr>
     </table>` : ""}
@@ -234,10 +234,10 @@ export function buildInvoiceCreatedEmail(params: {
     ${agentName ? `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="margin-bottom:24px;">
       <tr>
-        <td style="background:#F5F3FC;border:1px solid #EDE9FB;border-radius:8px;padding:12px 16px;">
-          <p style="margin:0 0 2px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#4027C1;">Agent</p>
+        <td style="background:#FFF7ED;border:1px solid #FFEDD5;border-radius:8px;padding:12px 16px;">
+          <p style="margin:0 0 2px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#EA580C;">Agent</p>
           <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#111827;">${agentName}</p>
-          ${agentEmail ? `<a href="mailto:${agentEmail}" style="font-size:12px;color:#4027C1;text-decoration:none;">${agentEmail}</a>` : ""}
+          ${agentEmail ? `<a href="mailto:${agentEmail}" style="font-size:12px;color:#EA580C;text-decoration:none;">${agentEmail}</a>` : ""}
         </td>
       </tr>
     </table>` : ""}
@@ -246,7 +246,7 @@ export function buildInvoiceCreatedEmail(params: {
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding-top:8px;">
-          <a href="${stripeHostedUrl}" style="display:inline-block;background:#4027C1;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">View Stripe Invoice</a>
+          <a href="${stripeHostedUrl}" style="display:inline-block;background:#EA580C;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">View Stripe Invoice</a>
         </td>
       </tr>
     </table>` : ""}
@@ -313,9 +313,9 @@ export function buildPaymentFailedClientEmail(params: {
       Your invoice is still open and ready whenever you are. Click the button below to complete your payment at your convenience.
     </p>
 
-    <div style="background:#F5F3FC;border-radius:10px;padding:20px 24px;border:1px solid #EDE9FB;text-align:center;margin-bottom:28px;">
-      <p style="margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#4027C1;">Amount Due</p>
-      <p style="margin:0;font-size:36px;font-weight:800;color:#2D1879;line-height:1.1;">${amount}</p>
+    <div style="background:#FFF7ED;border-radius:10px;padding:20px 24px;border:1px solid #FFEDD5;text-align:center;margin-bottom:28px;">
+      <p style="margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:#EA580C;">Amount Due</p>
+      <p style="margin:0;font-size:36px;font-weight:800;color:#7C2D12;line-height:1.1;">${amount}</p>
     </div>
 
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;margin-bottom:28px;">
@@ -325,7 +325,7 @@ export function buildPaymentFailedClientEmail(params: {
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
       <tr>
         <td align="center" style="padding-top:8px;">
-          <a href="${payUrl}" style="display:inline-block;background:#4027C1;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">Try Payment Again</a>
+          <a href="${payUrl}" style="display:inline-block;background:#EA580C;color:#ffffff;text-decoration:none;padding:12px 40px;border-radius:8px;font-size:14px;font-weight:700;">Try Payment Again</a>
         </td>
       </tr>
     </table>
@@ -359,7 +359,7 @@ export function buildPaymentNotificationEmail(params: {
 
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="border-top:1px solid #f3f4f6;">
       ${emailRow("Customer Name:", clientName)}
-      ${emailRow("Customer Email:", `<a href="mailto:${clientEmail}" style="color:#4027C1;text-decoration:none;">${clientEmail}</a>`)}
+      ${emailRow("Customer Email:", `<a href="mailto:${clientEmail}" style="color:#EA580C;text-decoration:none;">${clientEmail}</a>`)}
       ${emailRow("Invoice Number:", invoiceNum)}
       ${emailRow("Paid At:", date)}
     </table>

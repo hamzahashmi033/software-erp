@@ -9,7 +9,7 @@ interface StatCardProps {
 }
 
 const colorMap = {
-  purple: "bg-[#DCC9F7] text-[#4027C1]",
+  purple: "bg-[#FED7AA] text-[#EA580C]",
   green: "bg-emerald-100 text-emerald-600",
   amber: "bg-amber-100 text-amber-600",
   blue: "bg-blue-100 text-blue-600",
@@ -23,7 +23,7 @@ export function StatCard({
   color = "purple",
 }: StatCardProps) {
   return (
-    <div className="rounded-xl border border-[#DCC9F7] bg-white p-5 shadow-sm">
+    <div className="rounded-xl border border-[#FED7AA] bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">

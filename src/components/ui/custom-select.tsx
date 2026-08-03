@@ -55,7 +55,7 @@ export function CustomSelect({
       {label && (
         <label className="text-sm font-medium text-gray-800">
           {label}
-          {required && <span className="ml-1 text-[#4027C1]">*</span>}
+          {required && <span className="ml-1 text-[#EA580C]">*</span>}
         </label>
       )}
       <div ref={ref} className="relative">
@@ -68,13 +68,13 @@ export function CustomSelect({
           aria-expanded={open}
           className={[
             "w-full flex items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2 text-sm text-left transition-all",
-            "focus:outline-none focus:ring-2 focus:ring-[#4027C1]/30",
+            "focus:outline-none focus:ring-2 focus:ring-[#EA580C]/30",
             "disabled:opacity-50 disabled:cursor-not-allowed",
             open
-              ? "border-[#4027C1] ring-2 ring-[#4027C1]/20"
+              ? "border-[#EA580C] ring-2 ring-[#EA580C]/20"
               : error
               ? "border-red-400"
-              : "border-[#DCC9F7] hover:border-[#b9a8ef]",
+              : "border-[#FED7AA] hover:border-[#b9a8ef]",
           ].join(" ")}
         >
           <span className={selected?.value ? "text-gray-900" : "text-gray-400"}>
@@ -88,7 +88,7 @@ export function CustomSelect({
         {open && (
           <div
             role="listbox"
-            className="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-[#DCC9F7] bg-white shadow-xl shadow-[#4027C1]/10"
+            className="absolute z-50 mt-1 w-full overflow-hidden rounded-xl border border-[#FED7AA] bg-white shadow-xl shadow-[#EA580C]/10"
           >
             {options.map((opt) => {
               const isSelected = opt.value === value;
@@ -102,8 +102,8 @@ export function CustomSelect({
                   className={[
                     "w-full flex items-center justify-between gap-3 px-3 py-2.5 text-sm text-left transition-colors",
                     isSelected
-                      ? "bg-[#F5F3FC] text-[#4027C1]"
-                      : "text-gray-700 hover:bg-[#F5F3FC] hover:text-[#4027C1]",
+                      ? "bg-[#FFF7ED] text-[#EA580C]"
+                      : "text-gray-700 hover:bg-[#FFF7ED] hover:text-[#EA580C]",
                   ].join(" ")}
                 >
                   <div>
@@ -112,7 +112,7 @@ export function CustomSelect({
                       <span className="ml-1.5 text-xs text-gray-400">{opt.meta}</span>
                     )}
                   </div>
-                  {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-[#4027C1]" />}
+                  {isSelected && <Check className="h-3.5 w-3.5 shrink-0 text-[#EA580C]" />}
                 </button>
               );
             })}

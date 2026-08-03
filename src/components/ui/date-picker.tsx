@@ -88,7 +88,7 @@ export function DatePicker({
       {label && (
         <label className="text-sm font-medium text-gray-800">
           {label}
-          {required && <span className="ml-1 text-[#4027C1]">*</span>}
+          {required && <span className="ml-1 text-[#EA580C]">*</span>}
         </label>
       )}
       <div ref={ref} className="relative">
@@ -99,10 +99,10 @@ export function DatePicker({
             "w-full flex items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2 text-sm text-left transition-all",
             "focus:outline-none",
             open
-              ? "border-[#4027C1] ring-2 ring-[#4027C1]/20"
+              ? "border-[#EA580C] ring-2 ring-[#EA580C]/20"
               : error
               ? "border-red-400"
-              : "border-[#DCC9F7] hover:border-[#b9a8ef]",
+              : "border-[#FED7AA] hover:border-[#b9a8ef]",
           ].join(" ")}
         >
           <span className={display ? "text-gray-900" : "text-gray-400"}>{display ?? placeholder}</span>
@@ -123,12 +123,12 @@ export function DatePicker({
         </button>
 
         {open && (
-          <div className="absolute z-50 mt-1 w-72 rounded-xl border border-[#DCC9F7] bg-white p-3 shadow-xl shadow-[#4027C1]/10">
+          <div className="absolute z-50 mt-1 w-72 rounded-xl border border-[#FED7AA] bg-white p-3 shadow-xl shadow-[#EA580C]/10">
             <div className="mb-3 flex items-center justify-between">
               <button
                 type="button"
                 onClick={prevMonth}
-                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#F5F3FC] hover:text-[#4027C1]"
+                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#FFF7ED] hover:text-[#EA580C]"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
@@ -138,7 +138,7 @@ export function DatePicker({
               <button
                 type="button"
                 onClick={nextMonth}
-                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#F5F3FC] hover:text-[#4027C1]"
+                className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-[#FFF7ED] hover:text-[#EA580C]"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
@@ -172,10 +172,10 @@ export function DatePicker({
                     className={[
                       "mx-auto flex h-8 w-8 items-center justify-center rounded-lg text-sm transition-all",
                       isSelected
-                        ? "bg-[#4027C1] font-semibold text-white shadow-sm"
+                        ? "bg-[#EA580C] font-semibold text-white shadow-sm"
                         : isToday
-                        ? "border border-[#4027C1] font-semibold text-[#4027C1] hover:bg-[#F5F3FC]"
-                        : "text-gray-700 hover:bg-[#F5F3FC] hover:text-[#4027C1]",
+                        ? "border border-[#EA580C] font-semibold text-[#EA580C] hover:bg-[#FFF7ED]"
+                        : "text-gray-700 hover:bg-[#FFF7ED] hover:text-[#EA580C]",
                     ].join(" ")}
                   >
                     {day}
@@ -184,7 +184,7 @@ export function DatePicker({
               })}
             </div>
 
-            <div className="mt-3 flex gap-2 border-t border-[#EDE9FB] pt-3">
+            <div className="mt-3 flex gap-2 border-t border-[#FFEDD5] pt-3">
               {[
                 { label: "+7 days", days: 7 },
                 { label: "+14 days", days: 14 },
@@ -198,7 +198,7 @@ export function DatePicker({
                     key={days}
                     type="button"
                     onClick={() => { onChange(iso); setOpen(false); }}
-                    className="flex-1 rounded-lg bg-[#F5F3FC] px-2 py-1.5 text-xs font-medium text-[#4027C1] transition-colors hover:bg-[#EDE9FB]"
+                    className="flex-1 rounded-lg bg-[#FFF7ED] px-2 py-1.5 text-xs font-medium text-[#EA580C] transition-colors hover:bg-[#FFEDD5]"
                   >
                     {label}
                   </button>

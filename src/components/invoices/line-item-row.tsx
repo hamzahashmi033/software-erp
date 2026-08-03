@@ -14,8 +14,8 @@ interface LineItemRowProps {
 }
 
 const inputBase =
-  "w-full rounded-lg border border-[#DCC9F7] bg-white text-sm text-gray-900 placeholder:text-gray-400 " +
-  "focus:outline-none focus:border-[#4027C1] focus:ring-2 focus:ring-[#4027C1]/20 transition-all";
+  "w-full rounded-lg border border-[#FED7AA] bg-white text-sm text-gray-900 placeholder:text-gray-400 " +
+  "focus:outline-none focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/20 transition-all";
 
 export function LineItemRow({ item, index, onChange, onRemove, removable, currency = "usd" }: LineItemRowProps) {
   const subtotal = Math.round(item.quantity * item.unitPrice * 100);
@@ -25,7 +25,7 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
   }
 
   return (
-    <tr className="group border-t border-[#ece8f8] hover:bg-[#faf9ff] transition-colors">
+    <tr className="group border-t border-[#FFEDD5] hover:bg-[#faf9ff] transition-colors">
       <td className="px-3 py-2.5">
         <input
           type="text"
@@ -63,7 +63,7 @@ export function LineItemRow({ item, index, onChange, onRemove, removable, curren
       </td>
 
       <td className="px-3 py-2.5 w-[110px] text-right">
-        <span className="text-sm font-semibold text-[#2D1879]">
+        <span className="text-sm font-semibold text-[#7C2D12]">
           {formatCurrency(subtotal, currency)}
         </span>
       </td>

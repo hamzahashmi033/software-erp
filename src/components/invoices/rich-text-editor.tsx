@@ -31,8 +31,8 @@ function ToolbarButton({
       title={title}
       onClick={onClick}
       className={[
-        "rounded p-1.5 text-gray-500 transition-colors hover:bg-[#F0EAFC] hover:text-[#4027C1]",
-        active ? "bg-[#DCC9F7] text-[#4027C1]" : "",
+        "rounded p-1.5 text-gray-500 transition-colors hover:bg-[#FFEDD5] hover:text-[#EA580C]",
+        active ? "bg-[#FED7AA] text-[#EA580C]" : "",
       ].join(" ")}
     >
       {children}
@@ -67,25 +67,25 @@ export function RichTextEditor({
       <div
         className={[
           "overflow-hidden rounded-lg border bg-white",
-          error ? "border-red-400" : "border-[#DCC9F7]",
-          "focus-within:ring-2 focus-within:ring-[#4027C1] focus-within:border-transparent",
+          error ? "border-red-400" : "border-[#FED7AA]",
+          "focus-within:ring-2 focus-within:ring-[#EA580C] focus-within:border-transparent",
         ].join(" ")}
       >
-        <div className="flex items-center gap-0.5 border-b border-[#ece8f8] bg-[#F5F3FC] px-2 py-1.5">
+        <div className="flex items-center gap-0.5 border-b border-[#FFEDD5] bg-[#FFF7ED] px-2 py-1.5">
           <ToolbarButton title="Bold" onClick={() => editor?.chain().focus().toggleBold().run()} active={editor?.isActive("bold")}>
             <Bold className="h-4 w-4" />
           </ToolbarButton>
           <ToolbarButton title="Italic" onClick={() => editor?.chain().focus().toggleItalic().run()} active={editor?.isActive("italic")}>
             <Italic className="h-4 w-4" />
           </ToolbarButton>
-          <div className="mx-1 h-4 w-px bg-[#DCC9F7]" />
+          <div className="mx-1 h-4 w-px bg-[#FED7AA]" />
           <ToolbarButton title="Heading 2" onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} active={editor?.isActive("heading", { level: 2 })}>
             <Heading2 className="h-4 w-4" />
           </ToolbarButton>
           <ToolbarButton title="Heading 3" onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()} active={editor?.isActive("heading", { level: 3 })}>
             <Heading3 className="h-4 w-4" />
           </ToolbarButton>
-          <div className="mx-1 h-4 w-px bg-[#DCC9F7]" />
+          <div className="mx-1 h-4 w-px bg-[#FED7AA]" />
           <ToolbarButton title="Bullet list" onClick={() => editor?.chain().focus().toggleBulletList().run()} active={editor?.isActive("bulletList")}>
             <List className="h-4 w-4" />
           </ToolbarButton>

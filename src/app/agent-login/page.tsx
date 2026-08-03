@@ -40,7 +40,7 @@ function AgentLoginForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-2xl border border-[#DCC9F7] bg-white p-8 shadow-sm space-y-5"
+      className="rounded-2xl border border-[#FED7AA] bg-white p-8 shadow-sm space-y-5"
     >
       <h2 className="text-base font-semibold text-gray-900">Sign in to continue</h2>
 
@@ -54,7 +54,7 @@ function AgentLoginForm() {
           required
           autoFocus
           autoComplete="email"
-          className="w-full rounded-lg border border-[#DCC9F7] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1] focus:border-transparent"
+          className="w-full rounded-lg border border-[#FED7AA] bg-white px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EA580C] focus:border-transparent"
         />
       </div>
 
@@ -68,12 +68,12 @@ function AgentLoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
             autoComplete="current-password"
-            className="w-full rounded-lg border border-[#DCC9F7] bg-white px-4 py-2.5 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1] focus:border-transparent"
+            className="w-full rounded-lg border border-[#FED7AA] bg-white px-4 py-2.5 pr-10 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EA580C] focus:border-transparent"
           />
           <button
             type="button"
             onClick={() => setShow((v) => !v)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#4027C1]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#EA580C]"
           >
             {show ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
           </button>
@@ -82,7 +82,7 @@ function AgentLoginForm() {
 
       {error && <p className="text-xs text-red-500">{error}</p>}
 
-      <Button type="submit" loading={loading} className="w-full bg-[#7430FF]">
+      <Button type="submit" loading={loading} className="w-full bg-[#F97316]">
         Sign in
       </Button>
     </form>
@@ -91,7 +91,7 @@ function AgentLoginForm() {
 
 export default function AgentLoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F5F3FC] px-4">
+    <div className="flex min-h-screen items-center justify-center bg-[#FFF7ED] px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
           <img
@@ -101,7 +101,7 @@ export default function AgentLoginPage() {
         </div>
 
         <Suspense fallback={
-          <div className="rounded-2xl border border-[#DCC9F7] bg-white p-8 text-center text-sm text-gray-400">
+          <div className="rounded-2xl border border-[#FED7AA] bg-white p-8 text-center text-sm text-gray-400">
             Loading...
           </div>
         }>

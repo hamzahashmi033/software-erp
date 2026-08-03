@@ -143,8 +143,8 @@ export default function AgentsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EDE9FB]">
-                  <Plus className="h-4 w-4 text-[#4027C1]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFEDD5]">
+                  <Plus className="h-4 w-4 text-[#EA580C]" />
                 </div>
                 <h2 className="text-sm font-semibold text-gray-900">Create New Agent</h2>
               </div>
@@ -183,7 +183,7 @@ export default function AgentsPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#4027C1]"
+                    className="absolute right-3 top-[34px] text-gray-400 hover:text-[#EA580C]"
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -215,8 +215,8 @@ export default function AgentsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 mb-5">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EDE9FB]">
-                  <Users className="h-4 w-4 text-[#4027C1]" />
+                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#FFEDD5]">
+                  <Users className="h-4 w-4 text-[#EA580C]" />
                 </div>
                 <h2 className="text-sm font-semibold text-gray-900">Existing Agents</h2>
                 <span className="ml-auto text-xs text-gray-400">{agents.length} agent{agents.length !== 1 ? "s" : ""}</span>
@@ -224,12 +224,12 @@ export default function AgentsPage() {
 
               {loading ? (
                 <div className="flex justify-center py-8">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#4027C1] border-t-transparent" />
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-[#EA580C] border-t-transparent" />
                 </div>
               ) : agents.length === 0 ? (
                 <p className="py-8 text-center text-sm text-gray-400">No agents yet. Create one above.</p>
               ) : (
-                <div className="divide-y divide-[#EDE9FB]">
+                <div className="divide-y divide-[#FFEDD5]">
                   {agents.map((agent) => (
                     <div key={agent.id} className="py-3">
                       <div className="flex items-center justify-between">
@@ -246,7 +246,7 @@ export default function AgentsPage() {
                                 ? closePasswordEditor()
                                 : openPasswordEditor(agent.id)
                             }
-                            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-[#4027C1] hover:bg-[#F5F3FC] transition-colors"
+                            className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs text-[#EA580C] hover:bg-[#FFF7ED] transition-colors"
                           >
                             <KeyRound className="h-3.5 w-3.5" />
                             Change Password
@@ -263,7 +263,7 @@ export default function AgentsPage() {
                       </div>
 
                       {passwordEditId === agent.id && (
-                        <div className="mt-3 flex flex-wrap items-start gap-2 rounded-lg border border-[#DCC9F7] bg-[#F5F3FC] p-3">
+                        <div className="mt-3 flex flex-wrap items-start gap-2 rounded-lg border border-[#FED7AA] bg-[#FFF7ED] p-3">
                           <div className="relative flex-1 min-w-[180px]">
                             <input
                               type={showNewPassword ? "text" : "password"}
@@ -272,12 +272,12 @@ export default function AgentsPage() {
                               onChange={(e) => setNewPassword(e.target.value)}
                               minLength={6}
                               autoFocus
-                              className="h-9 w-full rounded-lg border border-[#DCC9F7] bg-white pl-3 pr-9 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#4027C1]"
+                              className="h-9 w-full rounded-lg border border-[#FED7AA] bg-white pl-3 pr-9 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
                             />
                             <button
                               type="button"
                               onClick={() => setShowNewPassword((v) => !v)}
-                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#4027C1]"
+                              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#EA580C]"
                             >
                               {showNewPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                             </button>
@@ -319,9 +319,9 @@ export default function AgentsPage() {
             </CardContent>
           </Card>
 
-          <div className="rounded-xl border border-[#DCC9F7] bg-[#F5F3FC] px-4 py-3 text-sm text-gray-600">
+          <div className="rounded-xl border border-[#FED7AA] bg-[#FFF7ED] px-4 py-3 text-sm text-gray-600">
             Agent login portal:{" "}
-            <span className="font-mono text-[#4027C1]">
+            <span className="font-mono text-[#EA580C]">
               {typeof window !== "undefined" ? window.location.origin : ""}/agent-login
             </span>
           </div>

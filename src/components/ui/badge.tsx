@@ -36,7 +36,7 @@ interface BadgeProps {
 export function Badge({ children, variant = "default" }: BadgeProps) {
   if (variant === "purple") {
     return (
-      <span className="inline-flex items-center rounded-full bg-[#DCC9F7] px-2.5 py-0.5 text-xs font-medium text-[#2D1879] ring-1 ring-inset ring-[#4027C1]/20">
+      <span className="inline-flex items-center rounded-full bg-[#FED7AA] px-2.5 py-0.5 text-xs font-medium text-[#7C2D12] ring-1 ring-inset ring-[#EA580C]/20">
         {children}
       </span>
     );

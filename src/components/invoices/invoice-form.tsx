@@ -148,7 +148,7 @@ export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormPro
             errors={errors}
           />
 
-          <div className="border-t border-[#EDE9FB]" />
+          <div className="border-t border-[#FFEDD5]" />
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <DepartmentSelect
@@ -174,7 +174,7 @@ export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormPro
             />
           </div>
 
-          <div className="border-t border-[#EDE9FB]" />
+          <div className="border-t border-[#FFEDD5]" />
 
           <Input
             label="Created By"
@@ -182,7 +182,7 @@ export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormPro
             value={createdByAgent}
             onChange={(e) => setCreatedByAgent(e.target.value)}
             readOnly={!!agentName}
-            className={agentName ? "bg-[#F5F3FC] text-gray-600 cursor-default" : ""}
+            className={agentName ? "bg-[#FFF7ED] text-gray-600 cursor-default" : ""}
             helper={agentName ? "Pre-filled from your agent account" : "Optional — appears in the client email"}
           />
         </CardContent>
@@ -260,7 +260,7 @@ export function InvoiceForm({ agentName, agentEmail, onSuccess }: InvoiceFormPro
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Any additional notes or payment instructions for the client…"
               rows={3}
-              className="w-full resize-none rounded-lg border border-[#DCC9F7] bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:border-[#4027C1] focus:ring-2 focus:ring-[#4027C1]/20"
+              className="w-full resize-none rounded-lg border border-[#FED7AA] bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:border-[#EA580C] focus:ring-2 focus:ring-[#EA580C]/20"
             />
           </div>
 
